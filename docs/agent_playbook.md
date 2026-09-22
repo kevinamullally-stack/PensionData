@@ -123,6 +123,28 @@ Statements, accessed via the `mcp__Dropbox__*` tools.
     Low` and say so in `notes`; for annual returns, just omit the year (see
     step 10).
 
+## A known failure mode: matching a document to the wrong fiscal year
+
+A pilot-batch review caught this exact bug, so check for it explicitly:
+an agent found the correct IPS document (e.g. an IPS dated/named for 2019)
+and correctly extracted its benchmark table, but assigned that table to
+the *wrong* fiscal year (attributing it to FY2020-2021 based on the
+document's formal "Effective Date," while the plan's own CAFR showed that
+exact benchmark structure was already the disclosed "current benchmark"
+during FY2019 itself — operational implementation had preceded the
+document's formal adoption date).
+
+To avoid this: don't assign a policy period's start year purely from an
+IPS's stated "Effective Date." Cross-check against the nearest CAFR you
+can fetch (or, if it's over the size limit, against a same-year IPS
+snapshot if one exists) for what benchmark it says was *actually in use*
+that fiscal year — a CAFR's own performance table is the better authority
+on which benchmark governed a given fiscal year's results, even if a
+separate IPS document's formal effective date suggests otherwise. When a
+same-or-adjacent-fiscal-year IPS snapshot exists in the folder, prefer it
+over an older one for that year's record, even if its stated effective
+date falls a few months after the fiscal year start.
+
 ## What NOT to do
 
 - Do not infer a benchmark or a return figure from what a "typical" plan of

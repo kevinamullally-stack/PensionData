@@ -17,9 +17,9 @@ ppd_id,PlanName,StateAbbrev,fy,size_rank,latest_MktAssets_net,status,batch
 9,California PERF,CA,2016.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
 9,California PERF,CA,2017.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
 9,California PERF,CA,2018.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2019.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2020.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2021.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
+9,California PERF,CA,2019.0,1.0,4.7732275e+08,done,user-verified-correction
+9,California PERF,CA,2020.0,1.0,4.7732275e+08,done,user-verified-correction
+9,California PERF,CA,2021.0,1.0,4.7732275e+08,done,user-verified-correction
 10,California Teachers,CA,2001.0,2.0,3.1029344e+08,done,pilot-batch-1-sonnet
 10,California Teachers,CA,2002.0,2.0,3.1029344e+08,done,pilot-batch-1-sonnet
 10,California Teachers,CA,2003.0,2.0,3.1029344e+08,done,pilot-batch-1-sonnet
