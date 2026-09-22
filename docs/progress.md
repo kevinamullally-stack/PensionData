@@ -166,3 +166,42 @@ source. Wisconsin RS's later gap years may still only yield a
 total-fund-only figure even with full access, since its Investment
 Section is mostly narrative outside the FY2017 CAFR (see the CSV's
 notes column) -- that's a genuine content limitation, not a size one.
+
+### Attempted 2026-09-22 in a remote session: local-access mode unavailable
+
+A session was started to run the backfill above in local-access mode,
+pointed at the synced Dropbox folder
+`C:\Users\kevin\Dropbox\Kevin\RevolvingDoor\CAFR2024`. It could not
+proceed, and no rows were collected. Recording the findings so the next
+attempt doesn't repeat them:
+
+- **The session ran in a remote Linux cloud container, not on the user's
+  PC.** The Windows path does not exist there, and neither does any
+  mount of it (checked `/mnt`, `/media`, and a filesystem-wide search for
+  `Dropbox` and `CAFR2024` -- zero hits). Only the git repo is present.
+  Local-access mode requires Claude Code running *on the machine that has
+  the synced folder*; a remote session cannot reach it, so it falls back
+  to the `mcp__Dropbox__*` tools and the 5 MiB limit -- exactly the
+  constraint local access was meant to remove.
+- **All 21 backfill rows are blocked remotely, not merely some.** Every
+  blocking file is 5.7-42.1 MB. Confirmed directly: the *smallest* of
+  them (`CA_CA-CALSTRS_CAFR_2020_10.pdf.pdf`, 5,733,502 bytes) returns
+  `FILE_TOO_LARGE` from `mcp__Dropbox__fetch` (limit 5,242,880 bytes).
+- **A promising remote workaround exists but is currently blocked by
+  egress policy.** `mcp__Dropbox__download_link` does return a valid
+  single-use URL for the *full* file regardless of size (verified on the
+  14.2 MB `CA_CA-CALPERS_CAFR_2014_9.pdf.pdf`), which would sidestep the
+  5 MiB text-extraction limit entirely -- download the PDF, parse it
+  locally with `pypdf`. But the download host
+  `dl.dropboxusercontent.com` is denied by the environment's egress
+  policy (`connect_rejected`, 403 on CONNECT). Per the agent proxy's
+  README, policy denials are to be reported, not routed around.
+  **If a future remote session is wanted, allowlisting
+  `*.dropboxusercontent.com` for egress would make full-size CAFR access
+  work remotely and make local-access mode unnecessary.** Note `pypdf`
+  needs `pip install --upgrade cffi cryptography` first in that image --
+  the preinstalled Debian `cryptography` breaks its import.
+
+Decision (unchanged): the backfill and all further collection wait for a
+session running locally on the user's own machine, per the local-access
+plan above.
