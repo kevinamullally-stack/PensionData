@@ -22,6 +22,7 @@ OUTPUT_COLUMNS = [
     "private_equity_benchmark", "hedge_fund_absolute_return_benchmark",
     "real_assets_commodities_benchmark", "cash_benchmark", "other_asset_classes_notes",
     "source_type", "source_document_name", "source_url", "source_document_fy",
+    "source_page", "source_quote",
     "confidence", "researcher", "research_date", "notes",
 ]
 

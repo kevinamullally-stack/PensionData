@@ -22,6 +22,8 @@
 | `source_document_name` | Title/identifier of the source document. |
 | `source_url` | URL to the source document (or citation, if no stable URL). |
 | `source_document_fy` | Fiscal year(s) the cited source document itself covers (may differ slightly from `fy`). |
+| `source_page` | Page number within the source document where the cited language appears, when determinable from the extracted text (the Dropbox text extraction preserves page-number footers). Blank if the document is a scanned image with no embedded page markers. |
+| `source_quote` | A short verbatim excerpt (one sentence or table fragment, not the whole page) from the source document that states the benchmark(s) recorded in this row. This is what verification checks against the actual re-fetched document. |
 | `confidence` | `High` (primary source, explicit benchmark table), `Medium` (primary source, benchmark inferred/described narratively), `Low` (secondary source only, or partial/ambiguous evidence). |
 | `researcher` | Identifier for the agent/batch that produced this record. |
 | `research_date` | ISO date the record was produced. |

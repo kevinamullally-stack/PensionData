@@ -67,6 +67,18 @@ Statements, accessed via the `mcp__Dropbox__*` tools.
    `source_url` should be the Dropbox path (e.g.
    `/Kevin/RevolvingDoor/CAFR2024/88_Ohio Teachers/OhioTRS_InvPolStmt_2012_88.pdf.pdf`).
 
+9. **Include a verbatim quote and page number.** In `source_quote`, copy the
+   exact sentence or table fragment (not the whole page) from the fetched
+   text that states the benchmark(s) you recorded — this is what gets
+   checked against the real document during verification, so it must be a
+   real substring of the extracted text, not a paraphrase. For
+   `source_page`: the Dropbox text extraction preserves page-number
+   footers as a lone number on its own line between blocks of blank lines
+   (e.g. `\n\n\n\n9 \n\nInvestment...`) — find the nearest such number
+   appearing just before your quote and report it. Leave `source_page`
+   blank if the document has no such markers (e.g. an old scanned volume
+   with no embedded text layer).
+
 ## What NOT to do
 
 - Do not infer a benchmark from what a "typical" plan of that type uses.
@@ -105,6 +117,8 @@ year), shaped like:
   "source_document_name": "OhioTRS_InvPolStmt_2012_88.pdf.pdf",
   "source_url": "/Kevin/RevolvingDoor/CAFR2024/88_Ohio Teachers/OhioTRS_InvPolStmt_2012_88.pdf.pdf",
   "source_document_fy": 2012,
+  "source_page": 14,
+  "source_quote": "Effective July 1, 2012 the Total Fund benchmark will be calculated using 18% Barclays Capital Universal Index, 38% Russell 3000, 23% International Blended Benchmark, 10% Real Estate Blended Benchmark, 10% Alternative Investment actual return, and 1% 3-month Treasury Bill Index.",
   "confidence": "High",
   "notes": "IPS also defines a second period effective 1/1/2013 with revised weights -- see separate period object."
 }
