@@ -18,6 +18,12 @@ for primary sourcing — it will fail. Your source is a Dropbox archive of
 each plan's own CAFRs, Actuarial Valuations, and Investment Policy
 Statements, accessed via the `mcp__Dropbox__*` tools.
 
+**If you are running with direct local filesystem access to this archive
+instead of the Dropbox tools** (e.g. a synced folder on the user's own
+machine), skip straight to the "Local-access mode" section below after
+reading the general procedure — it overrides step 13 and the AV-fallback
+guidance and removes most of the size-limit workarounds described here.
+
 ## Procedure
 
 1. **List the plan's folder**: `mcp__Dropbox__list_folder` on
@@ -125,14 +131,56 @@ Statements, accessed via the `mcp__Dropbox__*` tools.
     the page. Leave the page field blank if the document has no such
     markers (e.g. an old scanned volume with no embedded text layer).
 
-13. **If `mcp__Dropbox__fetch` errors with `FILE_TOO_LARGE`** (limit is
-    5 MiB; many recent high-resolution CAFRs and old scanned volumes exceed
-    it): try the nearest other file for that same fiscal year (AV instead
-    of CAFR, or vice versa), then the nearest adjacent fiscal year's
-    CAFR/AV/IPS instead. Do not skip a year silently — if nothing fetchable
-    exists nearby for a policy period, record the gap with `confidence:
-    Low` and say so in `notes`; for annual returns, just omit the year (see
-    step 10).
+13. **(Dropbox mode only) If `mcp__Dropbox__fetch` errors with
+    `FILE_TOO_LARGE`** (limit is 5 MiB; many recent high-resolution CAFRs
+    and old scanned volumes exceed it): try the nearest other file for
+    that same fiscal year (AV instead of CAFR, or vice versa), then the
+    nearest adjacent fiscal year's CAFR/AV/IPS instead. Do not skip a year
+    silently — if nothing fetchable exists nearby for a policy period,
+    record the gap with `confidence: Low` and say so in `notes`; for
+    annual returns, just omit the year (see step 10). **This step does not
+    apply in local-access mode — see that section below.**
+
+## Local-access mode (direct filesystem access instead of Dropbox)
+
+Use this mode instead of the Dropbox-tool steps above when the CAFR
+archive is mounted as a local folder (e.g. a synced Dropbox folder on the
+user's own machine) and you're reading files with the `Read` tool rather
+than `mcp__Dropbox__*`. This removes the two constraints that drove most
+of the cost and most of the coverage gaps in the remote/Dropbox pilot:
+
+- **No 5 MiB fetch limit.** Step 13 above (hunting for a smaller
+  substitute document, reconstructing figures from scrambled retrospective
+  charts, cross-validating ambiguous digit sequences across 3-4
+  documents) is a workaround for a limit that doesn't exist here — skip
+  it entirely. Every CAFR in the archive is readable regardless of size.
+  `Read` pages large PDFs in chunks of up to 20 pages via its `pages`
+  parameter rather than refusing them outright, so a large file is a
+  reason to target a page range, not a reason to abandon the document.
+  Use the CAFR's own table of contents (typically in its first 5-10
+  pages) to locate the Investment Section's page range before reading it;
+  if there's no usable table of contents, the Investment Section is
+  typically 40-70% of the way through the document — read a bracketing
+  range, then narrow.
+
+- **Don't parse Actuarial Valuation (AV) files as a routine source.** AVs
+  were only ever a fallback for fiscal years whose CAFR exceeded the
+  fetch limit, and even then they supplied nothing but a bare total-fund
+  actual return — no benchmark, no asset-class breakdown — which is why
+  every AV-sourced row in the pilot came back `confidence: Medium`. With
+  unrestricted CAFR access there is essentially never a reason to open
+  one. Only read a plan's AV when its folder has **no CAFR at all** for a
+  given fiscal year (a genuine document gap, not a size problem) — and
+  even then, prefer the CAFR's own GASB-67 "Schedule of Investment
+  Returns" (Financial Section RSI, now fully readable) over a standalone
+  AV/GASB67 supplement for returns data.
+
+- **IPS files are unaffected either way** — they were never blocked by
+  the size limit and remain the first source to check per step 2.
+
+Everything else in this playbook (fiscal-year mapping rules, the
+sourcing/verification requirements, both known-failure-mode sections
+below, and the output format) applies unchanged in local-access mode.
 
 ## A known failure mode: matching a document to the wrong fiscal year
 
