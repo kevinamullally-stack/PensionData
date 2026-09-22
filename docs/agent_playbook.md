@@ -79,11 +79,22 @@ Statements, accessed via the `mcp__Dropbox__*` tools.
    fill years the recent schedules don't cover.
 
 8. **Record one entry per fiscal year**: `total_fund_actual_return_pct`
-   and `total_fund_benchmark_return_pct` for that specific year, plus any
-   per-asset-class actual/benchmark pairs the same table discloses (put
-   those in `asset_class_returns_json`, e.g.
-   `{"us_equity": {"actual": 8.2, "benchmark": 7.9}}` — omit if the table
-   is total-fund-only).
+   and `total_fund_benchmark_return_pct` for that specific year, **and
+   always also try to record the same actual/benchmark pair for every
+   asset class the table breaks out** — most "Investment Results" /
+   "Portfolio Comparisons" tables report actual-vs-benchmark by category
+   (e.g. Public Equity, Fixed Income, Real Assets, Private Equity), not
+   just at the total-fund level, so extracting only the total-fund row
+   when the category-level rows are sitting right there in the same table
+   is an incomplete extraction, not a genuine gap. Map each category to
+   the closest field pair: `<class>_actual_return_pct` /
+   `<class>_benchmark_return_pct` for `us_equity`, `intl_equity`,
+   `global_equity`, `fixed_income`, `real_estate`, `private_equity`,
+   `hedge_fund_absolute_return`, `real_assets_commodities`, `cash` (same
+   class names as the composition fields in Part A). Use
+   `other_returns_notes` for a disclosed category that doesn't map
+   cleanly (e.g. a standalone "Opportunistic Funds" line). Leave a
+   class's pair blank only when the table genuinely doesn't break it out.
 
 9. **Do not confuse trailing/annualized figures with single-year returns.**
    A table column labeled "5-Year" or "10-Year" is an annualized return
@@ -201,7 +212,25 @@ Return a single JSON object with two arrays, `policy_periods` and
       "fy": 2012,
       "total_fund_actual_return_pct": 1.4,
       "total_fund_benchmark_return_pct": 1.1,
-      "asset_class_returns_json": "{\"us_equity\": {\"actual\": 3.8, \"benchmark\": 3.8}}",
+      "us_equity_actual_return_pct": 3.8,
+      "us_equity_benchmark_return_pct": 3.8,
+      "intl_equity_actual_return_pct": "",
+      "intl_equity_benchmark_return_pct": "",
+      "global_equity_actual_return_pct": "",
+      "global_equity_benchmark_return_pct": "",
+      "fixed_income_actual_return_pct": 6.9,
+      "fixed_income_benchmark_return_pct": 7.5,
+      "real_estate_actual_return_pct": "",
+      "real_estate_benchmark_return_pct": "",
+      "private_equity_actual_return_pct": "",
+      "private_equity_benchmark_return_pct": "",
+      "hedge_fund_absolute_return_actual_return_pct": "",
+      "hedge_fund_absolute_return_benchmark_return_pct": "",
+      "real_assets_commodities_actual_return_pct": "",
+      "real_assets_commodities_benchmark_return_pct": "",
+      "cash_actual_return_pct": "",
+      "cash_benchmark_return_pct": "",
+      "other_returns_notes": "",
       "returns_source_type": "CAFR",
       "returns_source_document_name": "OH-OH-STRS_CAFR_2016_88.pdf.pdf",
       "returns_source_url": "/Kevin/RevolvingDoor/CAFR2024/88_Ohio Teachers/OH-OH-STRS_CAFR_2016_88.pdf.pdf",

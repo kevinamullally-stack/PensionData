@@ -29,15 +29,24 @@ COMPOSITION_SOURCE_FIELDS = [
     "source_type", "source_document_name", "source_url", "source_document_fy",
     "source_page", "source_quote", "confidence",
 ]
-RETURNS_FIELDS = [
-    "total_fund_actual_return_pct", "total_fund_benchmark_return_pct", "asset_class_returns_json",
+RETURNS_ASSET_CLASSES = [
+    "us_equity", "intl_equity", "global_equity", "fixed_income", "real_estate",
+    "private_equity", "hedge_fund_absolute_return", "real_assets_commodities", "cash",
 ]
+RETURNS_FIELDS = (
+    ["total_fund_actual_return_pct", "total_fund_benchmark_return_pct"]
+    + [f"{cls}_actual_return_pct" for cls in RETURNS_ASSET_CLASSES]
+    + [f"{cls}_benchmark_return_pct" for cls in RETURNS_ASSET_CLASSES]
+    + ["other_returns_notes"]
+)
 RETURNS_SOURCE_FIELDS = [
     "returns_source_type", "returns_source_document_name", "returns_source_url",
     "returns_source_document_fy", "returns_source_page", "returns_source_quote",
     "returns_confidence",
 ]
-NUMERIC_RETURNS_FIELDS = ("total_fund_actual_return_pct", "total_fund_benchmark_return_pct")
+NUMERIC_RETURNS_FIELDS = tuple(
+    f for f in RETURNS_FIELDS if f.endswith("_return_pct")
+)
 
 OUTPUT_COLUMNS = (
     ["ppd_id", "PlanName", "StateAbbrev", "fy", "policy_period_start", "policy_period_end"]
