@@ -1,16 +1,27 @@
 # PensionData: Public Pension Investment-Return Benchmarks
 
 This project collects the **investment-return benchmarks** that U.S. public
-pension plans use to evaluate their own performance — both the blended
-total-fund policy benchmark and the individual asset-class benchmarks
-(U.S. equity, international equity, fixed income, real estate, private
-equity, etc.) — and joins that data to the
+pension plans use to evaluate their own performance — the blended
+total-fund policy benchmark, the individual asset-class benchmarks (U.S.
+equity, international equity, fixed income, real estate, private equity,
+etc.), and each fiscal year's actual realized return vs. that benchmark —
+and joins that data to the
 [Public Plans Database (PPD)](https://publicplansdata.org/) panel of 217
 plans across fiscal years 2001-2021.
 
-The PPD itself does not include benchmark index data, so this repo builds
-it via primary-source research (CAFRs/ACFRs, Investment Policy Statements,
-and public consultant reports) rather than any API or scrape.
+The PPD itself does not include benchmark data, so this repo builds it via
+primary-source research (each plan's own CAFRs/ACFRs, Actuarial Valuations,
+and Investment Policy Statements) rather than any API or scrape. Outbound
+web access is blocked in this execution environment, so sourcing comes from
+a Dropbox archive of those documents (see `docs/methodology.md`) instead of
+live web fetching.
+
+Every record is produced by two independent model passes per plan and
+reconciled — agreement is trusted, disagreement is flagged for manual
+review (`cross_model_agreement` column) — and every value carries a
+verbatim quote and page number back to its source document (see
+`docs/agent_playbook.md`), which is checked during verification before
+anything is treated as final.
 
 ## Layout
 
@@ -20,15 +31,15 @@ data/
     ppd_plan_level_clean.dta        Raw PPD source file, as provided
     ppd_plan_level_index.csv        Trimmed identifying/context columns per plan-year
   worklist.csv                      One row per plan-year needing benchmark research + status
-  benchmarks_collected.csv          Collected benchmark records (grows as batches complete)
+  benchmarks_collected.csv          Collected benchmark + returns records (grows as batches complete)
   schema.md                         Column dictionary for benchmarks_collected.csv
 docs/
-  methodology.md                    Why/how: the "policy period" research approach, sourcing standards
-  agent_playbook.md                 Exact procedure given to research agents
+  methodology.md                    Why/how: policy-period approach, Dropbox sourcing, verification
+  agent_playbook.md                 Exact procedure given to research agents (composition + returns)
   progress.md                       Batch-by-batch log of what's been collected
 scripts/
   build_worklist.py                 Regenerate worklist.csv / index.csv from the source .dta
-  merge_policy_periods.py           Expand a batch's found policy periods into worklist rows
+  merge_batch.py                    Reconcile one or two model passes and upsert into benchmarks_collected.csv
 ```
 
 ## Status
@@ -45,13 +56,20 @@ python3 scripts/build_worklist.py data/source/ppd_plan_level_clean.dta
 
 ## Recording a research batch
 
-Agents produce a JSON list of policy-period objects (see
-`docs/agent_playbook.md` for the shape). Merge a batch with:
+Each agent pass produces a JSON object `{"policy_periods": [...],
+"annual_returns": [...]}` per `docs/agent_playbook.md`. Merge a single pass:
 
 ```
-python3 scripts/merge_policy_periods.py path/to/batch.json <batch-name>
+python3 scripts/merge_batch.py pass_a.json <batch-name>
 ```
 
-This expands each period into per-fiscal-year rows in
-`data/benchmarks_collected.csv` and marks the corresponding rows in
-`data/worklist.csv` as `done`.
+Or reconcile two independent model passes for the same plan (the standard
+path — see `docs/methodology.md`'s verification section):
+
+```
+python3 scripts/merge_batch.py pass_a.json <batch-name-a> pass_b.json <batch-name-b>
+```
+
+This upserts rows into `data/benchmarks_collected.csv` keyed by
+`(ppd_id, fy)`, sets `cross_model_agreement` per row, and marks the
+corresponding rows in `data/worklist.csv` as `done`.
