@@ -92,8 +92,8 @@ Medium-confidence and noted as a different return-calculation methodology
 (money-weighted/net vs. time-weighted) where applicable. No figures were
 fabricated; genuine gaps were left blank.
 
-Coverage achieved so far (rows with `total_fund_actual_return_pct`
-populated):
+Final coverage (all 8 agents complete; rows with
+`total_fund_actual_return_pct` populated): 147 of 168 plan-years (87.5%).
 
 | Plan | Years covered | Gaps |
 |---|---|---|
@@ -102,10 +102,16 @@ populated):
 | Texas Teachers (108) | 21 / 21 | none |
 | Florida RS (26) | 20 / 21 | FY2013 (no fetchable source of any kind) |
 | California PERF (9) | 17 / 21 | FY2014, 2017, 2020, 2021 (CAFRs too large, no substitute found) |
+| California Teachers / CalSTRS (10) | 17 / 21 | FY2018-2021 (CAFRs too large, no AV disclosure) |
 | Ohio PERS (85) | 16 / 21 | FY2001-2003, 2005-2006 (CAFRs too large, no AV exists pre-2008) |
 | Wisconsin RS (125) | 14 / 21 | FY2001, 2004-2005, 2018-2021 (CAFRs too large; WRS's Investment Section is mostly narrative with no per-year table outside the FY2017 CAFR) |
-| California Teachers (10) | pending | agent still running |
 
 Every populated row carries a verbatim source quote, page, document name,
 and a `returns_confidence` rating; multi-year trailing columns (3/5/10-yr)
 were explicitly excluded, only genuine 1-year figures were recorded.
+Nearly all remaining gaps share one root cause: the plan's own CAFR for
+that fiscal year exceeds the Dropbox 5MB fetch limit and no smaller
+substitute document (AV, AIR, retrospective schedule) discloses the
+figure -- the same limitation flagged throughout the composition pass.
+Resolving most of these gaps would require the user's planned local-PC
+session with direct disk access to the full-size CAFRs.
