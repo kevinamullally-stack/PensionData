@@ -115,3 +115,34 @@ substitute document (AV, AIR, retrospective schedule) discloses the
 figure -- the same limitation flagged throughout the composition pass.
 Resolving most of these gaps would require the user's planned local-PC
 session with direct disk access to the full-size CAFRs.
+
+## Scaling decision: remaining ~209 plans
+
+Confirmed the Dropbox archive has a folder for all 217 worklist plans
+(226 folders total; 9 extras not in scope) -- source coverage is not a
+blocker for any plan. The 217 plans' AUM is heavily concentrated: the 8
+pilot plans alone are 35.4% of total assets ($5.1T across the full
+worklist); top 20 = 54.7%, top 50 = 77.1%, top 100 = 93.3%.
+
+Decided (2026-09-22): target **all 217 plans**, but **hold further
+collection until the user's local-access session is set up** (direct
+filesystem access to the synced Dropbox folder, using
+`docs/agent_playbook.md`'s new "Local-access mode" section) rather than
+continuing now against the remote Dropbox tools' 5 MiB fetch limit.
+Rationale: the pilot's returns pass showed the fetch limit is the
+dominant driver of both token cost (retrospective-chart reconstruction
+across multiple documents to work around blocked CAFRs, e.g. CalSTRS'
+137 tool calls / ~320k tokens) and coverage gaps (87.5% returns
+coverage, concentrated in exactly the plans/years whose CAFRs were too
+large); local access is expected to substantially cut cost and close
+most of those gaps, so it is worth waiting for rather than repeating the
+same limitation across 209 more plans.
+
+Next step once local access is available: run the full 217-plan
+composition + returns collection in waves (~8-10 plans/wave, matching
+pilot batch size), following the existing per-wave checklist --
+rebuild each wave's Dropbox/local file index fresh (don't reuse a stale
+one, per the Florida RS AV index gap found and fixed after the pilot),
+merge via `scripts/merge_batch.py`, run `scripts/verify_batch.py`
+against that fresh index, spot-check a sample, then commit/push before
+starting the next wave.
