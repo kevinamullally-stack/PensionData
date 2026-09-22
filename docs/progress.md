@@ -44,3 +44,34 @@ precise, same-year source exists and wasn't checked -- worth resolving
 before treating those rows as final, and worth building future batches
 around checking every available IPS year (they are cheap to fetch) rather
 than sampling every 3-5 years.
+
+### Resolution: all 26 flags investigated, 0 corrections needed
+
+Fetched every candidate same-year IPS (except the 2 already-known
+misfiled documents) and checked each one's actual stated effective date
+against the plan's real fiscal-year-end. Result:
+
+- **12 false positives**: CalSTRS FY2007/2016, Ohio PERS FY2009, Texas
+  Teachers FY2014, NYSTRS FY2011-2018. In every case the IPS's filename
+  year reflects its *adoption* date, but its benchmark table doesn't take
+  effect until the start of the *next* fiscal year -- the original
+  research had already assigned it there correctly. See
+  docs/agent_playbook.md's new "filename year is not effective year"
+  section.
+- **1 not-a-benchmark-document**: CalSTRS FY2014's flagged file is a
+  narrow "Policy on California Investments" mandate, unrelated to
+  Total Fund asset-allocation benchmarks.
+- **2 already-known misfiled documents**: Texas Teachers FY2021,
+  Wisconsin RS FY2018 (both previously identified as belonging to a
+  different plan).
+- **1 more false positive**: Florida RS FY2018 (effective FY2019, matches
+  original).
+- **10 confirmed-unfixable gaps**: Florida RS FY2003, 2007, 2008,
+  2010-2015, 2017 -- every flagged Florida IPS re-fetched and confirmed to
+  return blank/whitespace text (scanned images, no OCR layer). The
+  original SBA Annual Investment Report-based sourcing for these years
+  remains the best available.
+
+All 26 rows annotated with a `REVIEWED` note explaining the resolution;
+`scripts/verify_batch.py` now skips rows already marked `REVIEWED` so
+re-runs stay focused on genuinely new findings.

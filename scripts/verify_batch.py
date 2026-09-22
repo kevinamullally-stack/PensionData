@@ -98,6 +98,8 @@ def check_row(row: dict, index: dict) -> list:
         f for f in plan_files
         if f[2] == fy and f[0] not in cited_bases
     ]
+    if "REVIEWED" in row.get("notes", ""):
+        return findings  # already investigated; don't re-flag every run
     same_year_ips_unused = [f for f in same_year_unused if f[1] == "IPS"]
     if same_year_ips_unused and row.get("confidence") != "High":
         names = ", ".join(f[0] for f in same_year_ips_unused)

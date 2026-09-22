@@ -156,6 +156,35 @@ same-or-adjacent-fiscal-year IPS snapshot exists in the folder, prefer it
 over an older one for that year's record, even if its stated effective
 date falls a few months after the fiscal year start.
 
+## A second pattern: a document's filename year is not its effective year
+
+A systematic re-check of 26 candidate gaps across 6 plans (all flagged
+because an IPS file's filename year matched a fiscal year that cited a
+different document) found that **every one was already correct** — the
+apparent gap was an artifact of a consistent dating pattern, not a real
+miss:
+
+- IPS documents are usually named/dated by their **adoption** month
+  (e.g. "October 2011," "InvPolStmt_2014"), but a benchmark change
+  typically doesn't take effect until a specific date stated inside the
+  document — often the start of the *next* fiscal year. A plan with a
+  June 30 fiscal year-end whose IPS says "effective July 1" or was
+  "adopted at the July Board meeting" is describing the fiscal year
+  *after* the one implied by the filename.
+- Do not assign a policy period's start year from an IPS's filename or
+  even its adoption date alone. Find the actual "effective [date]" or
+  "adopted ... to be effective ..." language inside the document, convert
+  that date to the plan's own fiscal year (which may not be a calendar
+  year — check the plan's stated FYE), and use that.
+- Some `InvPolStmt`-named files are not Total Fund benchmark policies at
+  all (one was a narrow "in-state investments" mandate unrelated to
+  asset-allocation benchmarks) — skim a document's actual subject before
+  assuming its filename pattern means it's useful here.
+- Some plans' older IPS scans have no OCR text layer (fetch returns
+  blank/whitespace) — if a fetch returns empty text for a file, that's a
+  genuine dead end, not a bug in your search; fall back to the next
+  candidate source rather than retrying the same file.
+
 ## What NOT to do
 
 - Do not infer a benchmark or a return figure from what a "typical" plan of
