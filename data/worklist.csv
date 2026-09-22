@@ -1,22 +1,22 @@
 ppd_id,PlanName,StateAbbrev,fy,size_rank,latest_MktAssets_net,status,batch
-9,California PERF,CA,2001.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2002.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2003.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2004.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2005.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2006.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2007.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2008.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2009.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2010.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2011.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2012.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2013.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
+9,California PERF,CA,2001.0,1.0,4.7732275e+08,done,returns-pass-1
+9,California PERF,CA,2002.0,1.0,4.7732275e+08,done,returns-pass-1
+9,California PERF,CA,2003.0,1.0,4.7732275e+08,done,returns-pass-1
+9,California PERF,CA,2004.0,1.0,4.7732275e+08,done,returns-pass-1
+9,California PERF,CA,2005.0,1.0,4.7732275e+08,done,returns-pass-1
+9,California PERF,CA,2006.0,1.0,4.7732275e+08,done,returns-pass-1
+9,California PERF,CA,2007.0,1.0,4.7732275e+08,done,returns-pass-1
+9,California PERF,CA,2008.0,1.0,4.7732275e+08,done,returns-pass-1
+9,California PERF,CA,2009.0,1.0,4.7732275e+08,done,returns-pass-1
+9,California PERF,CA,2010.0,1.0,4.7732275e+08,done,returns-pass-1
+9,California PERF,CA,2011.0,1.0,4.7732275e+08,done,returns-pass-1
+9,California PERF,CA,2012.0,1.0,4.7732275e+08,done,returns-pass-1
+9,California PERF,CA,2013.0,1.0,4.7732275e+08,done,returns-pass-1
 9,California PERF,CA,2014.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2015.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2016.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
+9,California PERF,CA,2015.0,1.0,4.7732275e+08,done,returns-pass-1
+9,California PERF,CA,2016.0,1.0,4.7732275e+08,done,returns-pass-1
 9,California PERF,CA,2017.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
-9,California PERF,CA,2018.0,1.0,4.7732275e+08,done,pilot-batch-1-sonnet
+9,California PERF,CA,2018.0,1.0,4.7732275e+08,done,returns-pass-1
 9,California PERF,CA,2019.0,1.0,4.7732275e+08,done,user-verified-correction
 9,California PERF,CA,2020.0,1.0,4.7732275e+08,done,user-verified-correction
 9,California PERF,CA,2021.0,1.0,4.7732275e+08,done,user-verified-correction
@@ -41,107 +41,107 @@ ppd_id,PlanName,StateAbbrev,fy,size_rank,latest_MktAssets_net,status,batch
 10,California Teachers,CA,2019.0,2.0,3.1029344e+08,done,pilot-batch-1-sonnet
 10,California Teachers,CA,2020.0,2.0,3.1029344e+08,done,pilot-batch-1-sonnet
 10,California Teachers,CA,2021.0,2.0,3.1029344e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2001.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2002.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2003.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2004.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2005.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2006.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2007.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2008.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2009.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2010.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2011.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2012.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2013.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2014.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2015.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2016.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2017.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2018.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2019.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2020.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-83,NY State & Local ERS,NY,2021.0,3.0,2.2058058e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2001.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2002.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2003.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2004.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2005.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2006.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2007.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2008.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2009.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2010.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2011.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2012.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
+83,NY State & Local ERS,NY,2001.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2002.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2003.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2004.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2005.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2006.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2007.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2008.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2009.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2010.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2011.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2012.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2013.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2014.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2015.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2016.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2017.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2018.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2019.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2020.0,3.0,2.2058058e+08,done,returns-pass-1
+83,NY State & Local ERS,NY,2021.0,3.0,2.2058058e+08,done,returns-pass-1
+26,Florida RS,FL,2001.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2002.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2003.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2004.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2005.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2006.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2007.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2008.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2009.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2010.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2011.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2012.0,4.0,2.0208218e+08,done,returns-pass-1
 26,Florida RS,FL,2013.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2014.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2015.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2016.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2017.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2018.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2019.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2020.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-26,Florida RS,FL,2021.0,4.0,2.0208218e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2001.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2002.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2003.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2004.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2005.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2006.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2007.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2008.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2009.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2010.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2011.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2012.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2013.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2014.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2015.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2016.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2017.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2018.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2019.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2020.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-108,Texas Teachers,TX,2021.0,5.0,2.01807e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2001.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2002.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2003.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2004.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2005.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2006.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2007.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2008.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2009.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2010.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2011.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2012.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2013.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2014.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2015.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2016.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2017.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2018.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2019.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2020.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
-78,New York State Teachers,NY,2021.0,6.0,1.4814846e+08,done,pilot-batch-1-sonnet
+26,Florida RS,FL,2014.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2015.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2016.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2017.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2018.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2019.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2020.0,4.0,2.0208218e+08,done,returns-pass-1
+26,Florida RS,FL,2021.0,4.0,2.0208218e+08,done,returns-pass-1
+108,Texas Teachers,TX,2001.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2002.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2003.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2004.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2005.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2006.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2007.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2008.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2009.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2010.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2011.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2012.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2013.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2014.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2015.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2016.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2017.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2018.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2019.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2020.0,5.0,2.01807e+08,done,returns-pass-1
+108,Texas Teachers,TX,2021.0,5.0,2.01807e+08,done,returns-pass-1
+78,New York State Teachers,NY,2001.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2002.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2003.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2004.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2005.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2006.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2007.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2008.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2009.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2010.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2011.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2012.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2013.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2014.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2015.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2016.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2017.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2018.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2019.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2020.0,6.0,1.4814846e+08,done,returns-pass-1
+78,New York State Teachers,NY,2021.0,6.0,1.4814846e+08,done,returns-pass-1
 125,Wisconsin RS,WI,2001.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
-125,Wisconsin RS,WI,2002.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
-125,Wisconsin RS,WI,2003.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
+125,Wisconsin RS,WI,2002.0,7.0,1.418477e+08,done,returns-pass-1
+125,Wisconsin RS,WI,2003.0,7.0,1.418477e+08,done,returns-pass-1
 125,Wisconsin RS,WI,2004.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
 125,Wisconsin RS,WI,2005.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
-125,Wisconsin RS,WI,2006.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
-125,Wisconsin RS,WI,2007.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
-125,Wisconsin RS,WI,2008.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
-125,Wisconsin RS,WI,2009.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
-125,Wisconsin RS,WI,2010.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
-125,Wisconsin RS,WI,2011.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
-125,Wisconsin RS,WI,2012.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
-125,Wisconsin RS,WI,2013.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
-125,Wisconsin RS,WI,2014.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
-125,Wisconsin RS,WI,2015.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
-125,Wisconsin RS,WI,2016.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
-125,Wisconsin RS,WI,2017.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
+125,Wisconsin RS,WI,2006.0,7.0,1.418477e+08,done,returns-pass-1
+125,Wisconsin RS,WI,2007.0,7.0,1.418477e+08,done,returns-pass-1
+125,Wisconsin RS,WI,2008.0,7.0,1.418477e+08,done,returns-pass-1
+125,Wisconsin RS,WI,2009.0,7.0,1.418477e+08,done,returns-pass-1
+125,Wisconsin RS,WI,2010.0,7.0,1.418477e+08,done,returns-pass-1
+125,Wisconsin RS,WI,2011.0,7.0,1.418477e+08,done,returns-pass-1
+125,Wisconsin RS,WI,2012.0,7.0,1.418477e+08,done,returns-pass-1
+125,Wisconsin RS,WI,2013.0,7.0,1.418477e+08,done,returns-pass-1
+125,Wisconsin RS,WI,2014.0,7.0,1.418477e+08,done,returns-pass-1
+125,Wisconsin RS,WI,2015.0,7.0,1.418477e+08,done,returns-pass-1
+125,Wisconsin RS,WI,2016.0,7.0,1.418477e+08,done,returns-pass-1
+125,Wisconsin RS,WI,2017.0,7.0,1.418477e+08,done,returns-pass-1
 125,Wisconsin RS,WI,2018.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
 125,Wisconsin RS,WI,2019.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
 125,Wisconsin RS,WI,2020.0,7.0,1.418477e+08,done,pilot-batch-1-sonnet
@@ -149,24 +149,24 @@ ppd_id,PlanName,StateAbbrev,fy,size_rank,latest_MktAssets_net,status,batch
 85,Ohio PERS,OH,2001.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
 85,Ohio PERS,OH,2002.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
 85,Ohio PERS,OH,2003.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
-85,Ohio PERS,OH,2004.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
+85,Ohio PERS,OH,2004.0,8.0,1.09209656e+08,done,returns-pass-1
 85,Ohio PERS,OH,2005.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
 85,Ohio PERS,OH,2006.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
-85,Ohio PERS,OH,2007.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
-85,Ohio PERS,OH,2008.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
-85,Ohio PERS,OH,2009.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
-85,Ohio PERS,OH,2010.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
-85,Ohio PERS,OH,2011.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
-85,Ohio PERS,OH,2012.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
-85,Ohio PERS,OH,2013.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
-85,Ohio PERS,OH,2014.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
-85,Ohio PERS,OH,2015.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
-85,Ohio PERS,OH,2016.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
-85,Ohio PERS,OH,2017.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
-85,Ohio PERS,OH,2018.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
-85,Ohio PERS,OH,2019.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
-85,Ohio PERS,OH,2020.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
-85,Ohio PERS,OH,2021.0,8.0,1.09209656e+08,done,pilot-batch-1-sonnet
+85,Ohio PERS,OH,2007.0,8.0,1.09209656e+08,done,returns-pass-1
+85,Ohio PERS,OH,2008.0,8.0,1.09209656e+08,done,returns-pass-1
+85,Ohio PERS,OH,2009.0,8.0,1.09209656e+08,done,returns-pass-1
+85,Ohio PERS,OH,2010.0,8.0,1.09209656e+08,done,returns-pass-1
+85,Ohio PERS,OH,2011.0,8.0,1.09209656e+08,done,returns-pass-1
+85,Ohio PERS,OH,2012.0,8.0,1.09209656e+08,done,returns-pass-1
+85,Ohio PERS,OH,2013.0,8.0,1.09209656e+08,done,returns-pass-1
+85,Ohio PERS,OH,2014.0,8.0,1.09209656e+08,done,returns-pass-1
+85,Ohio PERS,OH,2015.0,8.0,1.09209656e+08,done,returns-pass-1
+85,Ohio PERS,OH,2016.0,8.0,1.09209656e+08,done,returns-pass-1
+85,Ohio PERS,OH,2017.0,8.0,1.09209656e+08,done,returns-pass-1
+85,Ohio PERS,OH,2018.0,8.0,1.09209656e+08,done,returns-pass-1
+85,Ohio PERS,OH,2019.0,8.0,1.09209656e+08,done,returns-pass-1
+85,Ohio PERS,OH,2020.0,8.0,1.09209656e+08,done,returns-pass-1
+85,Ohio PERS,OH,2021.0,8.0,1.09209656e+08,done,returns-pass-1
 28,Georgia Teachers,GA,2001.0,9.0,1.0214669e+08,pending,
 28,Georgia Teachers,GA,2002.0,9.0,1.0214669e+08,pending,
 28,Georgia Teachers,GA,2003.0,9.0,1.0214669e+08,pending,

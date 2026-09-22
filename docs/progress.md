@@ -75,3 +75,37 @@ against the plan's real fiscal-year-end. Result:
 All 26 rows annotated with a `REVIEWED` note explaining the resolution;
 `scripts/verify_batch.py` now skips rows already marked `REVIEWED` so
 re-runs stay focused on genuinely new findings.
+
+## Annual realized-returns pass (returns-pass-1)
+
+Ran a second wave of 8 research agents (one per pilot plan), narrower in
+scope than the original composition pass: collect actual vs. benchmark
+realized returns per fiscal year, at both total-fund and asset-class
+level, using the same Dropbox CAFR/AV/AIR archive. The 5MB Dropbox fetch
+limit bites harder here than in the composition pass, since a plan's most
+recent (largest, most information-rich) CAFRs are often the ones that
+exceed it -- so coverage is real but incomplete for several plans. Where a
+native fiscal-year source wasn't fetchable, agents used retrospective
+multi-year schedules (20-year summary tables, GASB-67 money-weighted
+return schedules) embedded in smaller documents, clearly flagged
+Medium-confidence and noted as a different return-calculation methodology
+(money-weighted/net vs. time-weighted) where applicable. No figures were
+fabricated; genuine gaps were left blank.
+
+Coverage achieved so far (rows with `total_fund_actual_return_pct`
+populated):
+
+| Plan | Years covered | Gaps |
+|---|---|---|
+| NY State & Local ERS (83) | 21 / 21 | none |
+| New York State Teachers (78) | 21 / 21 | none |
+| Texas Teachers (108) | 21 / 21 | none |
+| Florida RS (26) | 20 / 21 | FY2013 (no fetchable source of any kind) |
+| California PERF (9) | 17 / 21 | FY2014, 2017, 2020, 2021 (CAFRs too large, no substitute found) |
+| Ohio PERS (85) | 16 / 21 | FY2001-2003, 2005-2006 (CAFRs too large, no AV exists pre-2008) |
+| Wisconsin RS (125) | 14 / 21 | FY2001, 2004-2005, 2018-2021 (CAFRs too large; WRS's Investment Section is mostly narrative with no per-year table outside the FY2017 CAFR) |
+| California Teachers (10) | pending | agent still running |
+
+Every populated row carries a verbatim source quote, page, document name,
+and a `returns_confidence` rating; multi-year trailing columns (3/5/10-yr)
+were explicitly excluded, only genuine 1-year figures were recorded.
