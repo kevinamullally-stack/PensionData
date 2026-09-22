@@ -1,0 +1,22 @@
+ppd_id,plan_name,fy,blocked_document,blocked_document_size_mb,notes
+9,California PERF,2014,CA_CA-CALPERS_CAFR_2014_9.pdf.pdf,14.2,
+9,California PERF,2017,CA_CA-CALPERS_CAFR_2017_9.pdf.pdf,8.9,
+9,California PERF,2020,CA_CA-CALPERS_CAFR_2020_9.pdf.pdf,7.6,
+9,California PERF,2021,CA_CA-CALPERS_CAFR_2021_9.pdf.pdf,42.1,
+10,California Teachers,2018,CA_CA-CALSTRS_CAFR_2018_10.pdf.pdf,6.9,
+10,California Teachers,2019,CA_CA-CALSTRS_CAFR_2019_10.pdf.pdf,18.9,
+10,California Teachers,2020,CA_CA-CALSTRS_CAFR_2020_10.pdf.pdf,5.7,
+10,California Teachers,2021,CA_CA-CALSTRS_CAFR_2021_10.pdf.pdf,10.4,
+26,Florida RS,2013,FL_FL-FRS_CAFR_2013_26.pdf.pdf,12.7,Also confirmed too large: 2013_air.pdf (6.0MB) -- try CAFR first, AIR as backup within this same plan/year.
+85,Ohio PERS,2001,OH_OH-OPERS_CAFR_2001_85.pdf.pdf,7.2,No AV exists for this plan before 2008; CAFR is the only possible source.
+85,Ohio PERS,2002,OH_OH-OPERS_CAFR_2002_85.pdf.pdf,6.6,No AV exists for this plan before 2008; CAFR is the only possible source.
+85,Ohio PERS,2003,OH_OH-OPERS_CAFR_2003_85.pdf.pdf,6.4,No AV exists for this plan before 2008; CAFR is the only possible source.
+85,Ohio PERS,2005,OH_OH-OPERS_CAFR_2005_85.pdf.pdf,6.1,No AV exists for this plan before 2008; CAFR is the only possible source.
+85,Ohio PERS,2006,OH_OH-OPERS_CAFR_2006_85.pdf.pdf,31.4,No AV exists for this plan before 2008; CAFR is the only possible source.
+125,Wisconsin RS,2001,WI_WI-ETF_CAFR_2001_125.pdf.pdf,8.3,
+125,Wisconsin RS,2004,WI_WI-ETF_CAFR_2004_125.pdf.pdf,7.5,
+125,Wisconsin RS,2005,WI_WI-ETF_CAFR_2005_125.pdf.pdf,6.2,
+125,Wisconsin RS,2018,WI_WI-ETF_CAFR_2018_125.pdf.pdf,13.1,
+125,Wisconsin RS,2019,WI_WI-ETF_CAFR_2019_125.pdf.pdf,13.7,
+125,Wisconsin RS,2020,WI_WI-ETF_CAFR_2020_125.pdf.pdf,21.2,
+125,Wisconsin RS,2021,WI_WI-ETF_CAFR_2021_125.pdf.pdf,7.0,WRS's Investment Section is mostly narrative outside the FY2017 CAFR; even with full access, check whether this year's CAFR has an asset-class actual-vs-benchmark table before expecting a full row -- total-fund-only via GASB67 schedule is an acceptable fallback if not.

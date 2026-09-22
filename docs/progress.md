@@ -146,3 +146,23 @@ one, per the Florida RS AV index gap found and fixed after the pilot),
 merge via `scripts/merge_batch.py`, run `scripts/verify_batch.py`
 against that fresh index, spot-check a sample, then commit/push before
 starting the next wave.
+
+### First priority for the local session: backfill the 8 pilot plans' 21 gap years
+
+Before starting new plans, use local access to close the 21
+returns-pass gaps left by the 5MB fetch limit in the 8 already-completed
+plans (composition is already 100% complete for all 8; only annual
+returns has gaps). `data/local_access_backfill.csv` lists every gap row
+with the specific oversized CAFR that blocked it (all confirmed to
+exist in Dropbox, sizes 5.7-42.1MB) -- these are recoverable, not
+missing-source gaps. For each row: read the named CAFR locally (Investment
+Section, per the playbook's Local-access mode page-range guidance),
+extract that fiscal year's actual-vs-benchmark figures the same way as
+the original pass, then merge with `scripts/merge_batch.py` using a new
+batch name (e.g. `returns-pass-2-local`) so `cross_model_agreement`
+reflects the new pass. Two rows (Ohio PERS FY2001-2003/2005-2006) have
+no AV fallback at all before 2008, so the CAFR is the only possible
+source. Wisconsin RS's later gap years may still only yield a
+total-fund-only figure even with full access, since its Investment
+Section is mostly narrative outside the FY2017 CAFR (see the CSV's
+notes column) -- that's a genuine content limitation, not a size one.
