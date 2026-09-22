@@ -43,6 +43,30 @@ to cover all 21 worklist rows; a plan that revised its benchmarks four times
 needs ~5. This is both more efficient and more accurate than assuming
 year-over-year continuity without evidence.
 
+## Primary source archive (Dropbox)
+
+All 217 plans in the worklist have a matching folder in a Dropbox archive at
+`/Kevin/RevolvingDoor/CAFR2024/<ppd_id>_<PlanName>/` (e.g.
+`/Kevin/RevolvingDoor/CAFR2024/9_California PERF/`), confirmed to cover 100%
+of the worklist's plans. Each plan folder contains, per fiscal year where
+available:
+
+- `*_CAFR_<year>_<ppd_id>.pdf.pdf` — Comprehensive/Annual Comprehensive
+  Financial Report
+- `*_AV_<year>_<ppd_id>.pdf.pdf` — Actuarial Valuation
+- Occasional Investment Policy Statement snapshots, e.g.
+  `<Plan>_InvPolStmt_<year>_<ppd_id>.pdf.pdf` — these are the single best
+  source: they state benchmarks explicitly, including effective dates when a
+  revision occurred (see `docs/agent_playbook.md`).
+
+This is the primary source for this project, in place of live web
+fetching — outbound web access (WebFetch to CAFR/IPS sites, state government
+sites, publicplansdata.org itself) is blocked in this execution
+environment's network policy. `mcp__Dropbox__fetch` extracts full text from
+files up to 5 MiB, which covers the IPS snapshots and many (not all) CAFR/AV
+years — larger scanned/high-res PDFs exceed that limit and need the
+fallback in the playbook.
+
 ## Sourcing standards
 
 Preferred sources, in order:
@@ -66,6 +90,34 @@ Every record must carry: `source_type`, `source_document_name`,
 source document itself covers, and a `confidence` rating. See
 `docs/agent_playbook.md` for the exact research procedure given to agents,
 and `data/schema.md` for the output column definitions.
+
+## Verification (required before any record is merged)
+
+LLM-extracted data can hallucinate a filename, misquote a document, or
+attribute the right benchmark to the wrong plan/year. No policy-period
+record is merged into `data/benchmarks_collected.csv` until it passes:
+
+1. **Provenance check** — `source_document_name` / `source_url` must match
+   an actual file in that plan's Dropbox folder (checked against a real
+   `mcp__Dropbox__list_folder` listing, not the agent's say-so).
+2. **Quote verification** — re-fetch the cited document and confirm the
+   specific benchmark language claimed actually appears in it. A record
+   whose citation doesn't check out is dropped or downgraded to
+   `confidence: Low` with a note, never kept as-is.
+3. **Identity check** — `ppd_id`/`fy` in the record must match the plan/year
+   it was assigned to.
+4. **Coverage check** — a plan's reported policy periods should span its
+   full assigned fiscal-year range; an unexplained gap is treated as a
+   defect, not silently accepted. An explained gap must carry
+   `confidence: Low` and a reason.
+5. **Plausibility check** — benchmark names should resolve to real,
+   recognizable indices (Russell 3000, MSCI ACWI ex-US, Bloomberg/Barclays
+   Aggregate, NCREIF ODCE, HFRI, etc.) or an explicit custom-composite
+   description; anything else is flagged for manual review rather than
+   trusted.
+
+Each batch's verification pass/fail tally is logged in `docs/progress.md`
+alongside the row counts.
 
 ## Status tracking
 

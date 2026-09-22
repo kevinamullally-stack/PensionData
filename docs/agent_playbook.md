@@ -4,50 +4,80 @@ You are researching **one public pension plan** at a time. Your job: find
 the investment-return benchmark(s) it used to evaluate performance, for
 every fiscal year assigned to you, using the policy-period method below.
 
+**Web access is blocked in this environment.** Do not use WebFetch/WebSearch
+for primary sourcing — it will fail. Your source is a Dropbox archive of
+each plan's own CAFRs, Actuarial Valuations, and Investment Policy
+Statements, accessed via the `mcp__Dropbox__*` tools.
+
 ## Procedure
 
-1. **Find the plan's CAFR/ACFR archive.** Search `"<plan full name>" annual
-   comprehensive financial report` or `"<plan full name>" CAFR filetype:pdf`.
-   Most plans host an archive of past CAFRs/ACFRs on their own website
-   (often under "Financial Reports" or "Publications"). Prefer the plan's
-   own domain over aggregators.
-2. **Open the Investment Section of 2-4 CAFRs spread across your assigned
-   fiscal-year range** (e.g. for 2001-2021, check something like FY2003,
-   FY2009, FY2015, FY2021) — enough to detect when the benchmark set
-   changed. Look for tables titled "Target Asset Allocation," "Investment
-   Results," "Policy Index," "Performance vs. Benchmark," or similar.
-3. **Record the total-fund policy benchmark** exactly as described (it is
-   very often a *composite/custom* index defined as "weighted average of
-   asset-class benchmarks per target allocation" rather than a single named
-   index — record it that way if that's what the source says).
-4. **Record each asset-class benchmark** named in that table, mapped to the
-   closest category in `data/schema.md` (US equity, international equity,
-   fixed income, real estate, private equity, hedge fund/absolute return,
-   real assets/commodities, cash). If the plan doesn't have a category, skip
-   that field.
-5. **Bracket the policy period**: once you find a benchmark set in FY_X and
-   it differs from the previous one you found, narrow down (or reasonably
-   infer from context — e.g. IPS revision dates mentioned in board minutes)
-   the fiscal year the change took effect. It is fine to state an
-   approximate boundary with `confidence: Medium` if the exact transition
-   year isn't pinned down.
-6. **If a plan's IPS/CAFR is not findable** for part of the range, say so
-   explicitly rather than guessing — leave those years as a `notes`-only
-   record with blank benchmark fields and `confidence: Low`.
-7. **Always cite your source**: `source_type`, `source_document_name`,
-   `source_url`, and `source_document_fy`.
+1. **List the plan's folder**: `mcp__Dropbox__list_folder` on
+   `/Kevin/RevolvingDoor/CAFR2024/<ppd_id>_<PlanName>` (exact folder name
+   given in your assignment). Files are named
+   `<STATE>_<PLANCODE>_<DOCTYPE>_<year(s)>_<ppd_id>.pdf.pdf` where DOCTYPE is
+   `CAFR`, `AV` (Actuarial Valuation), or a plan-specific Investment Policy
+   Statement name (e.g. `OhioTRS_InvPolStmt_2012_88.pdf.pdf`). Some year
+   values are ranges (e.g. `1937-1942`) for old combined volumes.
+
+2. **Fetch Investment Policy Statement files first** — these are the single
+   best source and are usually small. Use `mcp__Dropbox__fetch` with the
+   file's path. IPS documents typically state the total-fund benchmark
+   formula explicitly, often with **effective dates for each revision**
+   (e.g. "Effective July 1, 2012 the Total Fund benchmark will be calculated
+   using 18% Barclays Capital Universal Index, 38% Russell 3000, 23%
+   International Blended Benchmark, 10% Real Estate Blended Benchmark, 10%
+   Alternative Investment actual return, and 1% 3-month Treasury Bill Index.
+   Effective January 1, 2013 the Total Fund benchmark will be calculated
+   using ..." — that single document can define two policy periods by
+   itself). Read for asset-class sub-benchmarks too (international,
+   real estate, fixed income sections typically define their own blended
+   benchmark).
+
+3. **Fill gaps with CAFR/AV files spread across your fiscal-year range**
+   (e.g. ~every 3-5 years) via `mcp__Dropbox__fetch`. CAFR Investment
+   Sections usually have a "Policy Index," "Total Fund Benchmark," or
+   "Investment Results vs. Benchmark" table for that fiscal year — use it to
+   confirm or extend a policy period found from an IPS, or as your only
+   source when no IPS snapshot exists nearby.
+
+4. **If `mcp__Dropbox__fetch` errors with `FILE_TOO_LARGE`** (limit is 5 MiB;
+   many recent high-resolution CAFRs and old scanned volumes exceed it):
+   try the nearest other file for that same fiscal year (AV instead of
+   CAFR, or vice versa), then the nearest adjacent fiscal year's CAFR/AV/IPS
+   instead. Do not skip the year silently — if nothing fetchable exists
+   nearby, record it as a gap with `confidence: Low` and say so in `notes`.
+
+5. **Record the total-fund policy benchmark** exactly as described — it is
+   very often a *composite/custom* index defined as a weighted blend of
+   asset-class benchmarks per target allocation. Record the literal
+   weights/index names given, not a paraphrase.
+
+6. **Record each asset-class benchmark** mentioned, mapped to the closest
+   category in `data/schema.md` (US equity, international equity, fixed
+   income, real estate, private equity, hedge fund/absolute return, real
+   assets/commodities, cash). Skip fields the plan's documents don't cover.
+
+7. **Bracket each policy period** using explicit effective dates when the
+   source gives them (most precise); otherwise infer a boundary from which
+   fiscal years' CAFRs show the old vs. new benchmark, and mark
+   `confidence: Medium` for an inferred boundary.
+
+8. **Always cite your source**: `source_type` (`IPS`, `CAFR`, or `AV`),
+   `source_document_name` (the exact filename), and `source_document_fy`.
+   `source_url` should be the Dropbox path (e.g.
+   `/Kevin/RevolvingDoor/CAFR2024/88_Ohio Teachers/OhioTRS_InvPolStmt_2012_88.pdf.pdf`).
 
 ## What NOT to do
 
 - Do not infer a benchmark from what a "typical" plan of that type uses.
   Every record must trace to something you actually read for that plan.
-- Do not treat a secondary aggregator (NASRA summaries, Wikipedia, generic
-  finance blogs) as sufficient sourcing on its own — use it only to locate
-  the primary document, and mark `confidence: Low` if a primary source
-  genuinely can't be found.
-- Do not assume the benchmark never changed across 21 years just because
-  you only checked one year — check enough spread-out years to catch a
-  revision (see step 2).
+- Do not attempt WebSearch/WebFetch as a primary source — it is blocked in
+  this environment and will waste time. The Dropbox archive has 100% plan
+  coverage; if a specific year is genuinely missing from it, say so rather
+  than substituting a web guess.
+- Do not assume the benchmark never changed across the full range just
+  because you only checked one document — check enough spread-out
+  years/documents to catch a revision (step 3).
 
 ## Output format
 
@@ -56,27 +86,27 @@ year), shaped like:
 
 ```json
 {
-  "ppd_id": 9,
-  "plan_name": "California PERF",
-  "policy_period_start": 2011,
-  "policy_period_end": 2015,
-  "total_fund_benchmark": "Custom Policy Index weighted per target asset allocation",
+  "ppd_id": 88,
+  "plan_name": "Ohio Teachers",
+  "policy_period_start": 2012,
+  "policy_period_end": 2012,
+  "total_fund_benchmark": "18% Barclays Capital Universal Index, 38% Russell 3000, 23% International Blended Benchmark, 10% Real Estate Blended Benchmark, 10% Alternative Investment actual return, 1% 3-month Treasury Bill Index (effective 7/1/2012)",
   "us_equity_benchmark": "Russell 3000",
-  "intl_equity_benchmark": "MSCI ACWI ex-US IMI",
+  "intl_equity_benchmark": "80% MSCI World ex-US (50% hedged), 20% MSCI Emerging Markets Free Index",
   "global_equity_benchmark": "",
-  "fixed_income_benchmark": "Bloomberg Barclays US Aggregate",
-  "real_estate_benchmark": "NCREIF ODCE (net)",
-  "private_equity_benchmark": "Russell 3000 + 300bps (custom)",
-  "hedge_fund_absolute_return_benchmark": "",
-  "real_assets_commodities_benchmark": "CPI + 4%",
+  "fixed_income_benchmark": "Barclays Capital Universal Index",
+  "real_estate_benchmark": "85% NCREIF Property Index, 15% Wilshire REIT Index (through 6/30/2012)",
+  "private_equity_benchmark": "",
+  "hedge_fund_absolute_return_benchmark": "Alternative Investment actual return (no external benchmark)",
+  "real_assets_commodities_benchmark": "",
   "cash_benchmark": "91-day T-Bill",
   "other_asset_classes_notes": "",
-  "source_type": "CAFR",
-  "source_document_name": "CalPERS FY2013 CAFR, Investment Section p.XX",
-  "source_url": "https://...",
-  "source_document_fy": 2013,
+  "source_type": "IPS",
+  "source_document_name": "OhioTRS_InvPolStmt_2012_88.pdf.pdf",
+  "source_url": "/Kevin/RevolvingDoor/CAFR2024/88_Ohio Teachers/OhioTRS_InvPolStmt_2012_88.pdf.pdf",
+  "source_document_fy": 2012,
   "confidence": "High",
-  "notes": ""
+  "notes": "IPS also defines a second period effective 1/1/2013 with revised weights -- see separate period object."
 }
 ```
 
