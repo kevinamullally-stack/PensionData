@@ -1,3 +1,7 @@
 __pycache__/
 *.pyc
 .DS_Store
+*.dta
+!data/source/ppd_plan_level_clean.dta
+*.pkl
+*.docx
