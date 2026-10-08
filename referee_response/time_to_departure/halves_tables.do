@@ -95,3 +95,33 @@ foreach v in peer_adj_ret bench_adj_ret_pct fee_ratio_pct {
 }
 restore
 **** End Tables XI-XIII ****
+
+**** Table XI-split / XII-split: Table 3 regressions with Conflicted split into first and second half ****
+* Omitted category = all non-conflicted plan-years, exactly as in Table 3.
+generate conf_first  = (conf_pen_vendor==1 & second_half==0) if !missing(conf_pen_vendor)
+generate conf_second = (conf_pen_vendor==1 & second_half==1) if !missing(conf_pen_vendor)
+generate conf_undef  = (conf_pen_vendor==1 & missing(second_half)) if !missing(conf_pen_vendor)   // conflicted, no departure/tenure info (not reported)
+label variable conf_first  "Conflicted CIO x First Half of Tenure (0/1)"
+label variable conf_second "Conflicted CIO x Second Half of Tenure (0/1)"
+global x conf_first conf_second conf_undef
+global samp3 "cio_dum==1 & fy<=2020 & curr1==0"
+foreach y in peer_adj_ret bench_adj_ret_pct fee_ratio_pct {
+	global name1 tableXIsplit_`y'
+	reghdfe `y' $x $controls1 $controls2 $controls3 if $samp3, absorb(fy) vce(cluster ppd_id fy)
+	test conf_first = conf_second
+	local p1 = r(p)
+	outreg2 using $name1, excel label replace $cosmetics keep(conf_first conf_second $controls1 $controls2 $controls3) addtext(Clustered, Plan & Year, Plan FE, No, Year FE, Yes) addstat(p-value First=Second, `p1') stats(coef tstat)
+	reghdfe `y' $x $controls1 $controls2 $controls3 $controls4 $controls5 if $samp3, absorb(fy) vce(cluster ppd_id fy)
+	test conf_first = conf_second
+	local p1 = r(p)
+	outreg2 using $name1, excel label append $cosmetics keep(conf_first conf_second $controls1 $controls2 $controls3 $controls4 $controls5) addtext(Clustered, Plan & Year, Plan FE, No, Year FE, Yes) addstat(p-value First=Second, `p1') stats(coef tstat)
+	reghdfe `y' $x $controls1 $controls2 $controls3 $controls4 $controls5 if $samp3, absorb(ppd_id) vce(cluster ppd_id fy)
+	test conf_first = conf_second
+	local p1 = r(p)
+	outreg2 using $name1, excel label append $cosmetics keep(conf_first conf_second $controls1 $controls2 $controls3 $controls4 $controls5) addtext(Clustered, Plan & Year, Plan FE, Yes, Year FE, No) addstat(p-value First=Second, `p1') stats(coef tstat)
+	reghdfe `y' $x $controls1 $controls2 $controls3 $controls4 $controls5 if $samp3, absorb(ppd_id fy) vce(cluster ppd_id fy)
+	test conf_first = conf_second
+	local p1 = r(p)
+	outreg2 using $name1, excel label append $cosmetics keep(conf_first conf_second $controls1 $controls2 $controls3 $controls4 $controls5) addtext(Clustered, Plan & Year, Plan FE, Yes, Year FE, Yes) addstat(p-value First=Second, `p1') stats(coef tstat)
+}
+**** End split tables ****
