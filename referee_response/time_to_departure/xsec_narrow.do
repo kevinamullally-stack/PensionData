@@ -185,4 +185,59 @@ foreach y in peer_adj_ret bench_adj_upd {
 	contint `y' log_comp, controls(`full') out($name1) mode(append)  label(3 conf x trend) extra(trend)
 	contint `y' log_comp, controls(`full') out($name1) mode(append)  label(4 conf x year indicators) extra(`yd')
 }
+
+* =====================================================================================
+* 5. Three periods: 2001-2008, 2009-2014, 2015-2020 (Three periods sheet)
+* =====================================================================================
+capture drop conf_p1 conf_p2 conf_p3 conf_rest p2 p3
+generate conf_p1   = conf_pen_vendor*(fy<=2008)
+generate conf_p2   = conf_pen_vendor*inrange(fy,2009,2014)
+generate conf_p3   = conf_pen_vendor*(fy>=2015)
+generate conf_rest = conf_pen_vendor*!inrange(fy,2009,2014)
+generate p2 = inrange(fy,2009,2014)
+generate p3 = (fy>=2015)
+* Panel A: Conflicted CIO by period (controls common to all periods)
+foreach y in peer_adj_ret bench_adj_upd {
+	global name1 periods3_`y'
+	local mode replace
+	foreach sp in "full fy" "full fye1" "narrow fye1" {
+		tokenize `sp'
+		local ctl ``1''
+		local fe `2'
+		reghdfe `y' conf_p1 conf_p2 conf_p3 `ctl' if insamp, absorb(`fe') vce(cluster ppd_id fy)
+		test conf_p2 = conf_p1
+		local pa = r(p)
+		test conf_p2 = conf_p3
+		local pb = r(p)
+		test conf_p1 = conf_p3
+		local pc = r(p)
+		outreg2 using $name1, excel label `mode' $cosmetics keep(conf_p1 conf_p2 conf_p3) addstat(p 09-14 = 01-08, `pa', p 09-14 = 15-20, `pb', p 01-08 = 15-20, `pc') addtext(Controls, `1', FE, `fe') stats(coef tstat)
+		local mode append
+		reghdfe `y' conf_p2 conf_rest `ctl' if insamp, absorb(`fe') vce(cluster ppd_id fy)
+		test conf_p2 = conf_rest
+		local pd = r(p)
+		outreg2 using $name1, excel label append $cosmetics keep(conf_p2 conf_rest) addstat(p 09-14 = other years, `pd') addtext(Controls, `1', FE, `fe') stats(coef tstat)
+	}
+}
+* Panel B: Conflicted CIO x pay, without and with Conflicted CIO x period (all controls + fye1 FE).
+* Centering does not change the Conflicted x X coefficient, so X enters uncentered here.
+foreach y in peer_adj_ret bench_adj_upd {
+	global name1 paypd_`y'
+	local mode replace
+	foreach x in underpaid c_real c_annual log_comp {
+		local ctl : list full - x
+		capture drop newjob newjob_x xvar cp2 cp3
+		gen newjob   = conf_pen_vendor
+		gen newjob_x = conf_pen_vendor*`x'
+		gen xvar     = `x'
+		gen cp2      = conf_pen_vendor*p2
+		gen cp3      = conf_pen_vendor*p3
+		reghdfe `y' newjob newjob_x xvar `ctl' if insamp, absorb(fye1) vce(cluster ppd_id fy)
+		outreg2 using $name1, excel label `mode' $cosmetics keep(newjob_x) addtext(X, `x', Period controls, No) stats(coef tstat)
+		local mode append
+		reghdfe `y' newjob newjob_x xvar cp2 cp3 `ctl' if insamp, absorb(fye1) vce(cluster ppd_id fy)
+		outreg2 using $name1, excel label append $cosmetics keep(newjob_x cp2 cp3) addtext(X, `x', Period controls, Yes) stats(coef tstat)
+		drop newjob newjob_x xvar cp2 cp3
+	}
+}
 **** End narrow controls ****

@@ -180,5 +180,49 @@ for y,ptitle in [('peer_adj_ret100','Panel A. Peer-Adjusted Returns'),('b_AB','P
         r+=1
     for c in range(1,6): ws.cell(row=r-1,column=c).border=Border(bottom=thin)
     r+=2
+
+# ---------- three periods ----------
+P=pd.read_pickle('period3_res.pkl'); P3=P['P3']; PM=P['PM']; PSPECS=P['SPECS']; PXS=P['XS']
+ws=setup('Three periods','Effect of Conflict in 2001-2008, 2009-2014 and 2015-2020',
+ "Panel A re-estimates Table III with Conflicted CIO interacted with indicators for 2001-2008, 2009-2014 and 2015-2020 (control variables common to all periods), under three specifications; the right-hand columns pool 2001-2008 and 2015-2020 and test whether the 2009-2014 effect differs from the effect in the other years. "
+ "The sample has 192 conflicted plan-years (32 CIOs) in 2001-2008, 125 (22 CIOs) in 2009-2014 and 50 (10 CIOs) in 2015-2020. "
+ "Panel B reports the Conflicted CIO x pay coefficient from the interaction specification (all Table III controls, fiscal-year-end date fixed effects) without and with Conflicted CIO x 2009-2014 and Conflicted CIO x 2015-2020 controls. Underpaid definitions other than the paper's are computed from reported CIO_TotalComp and filled within the CIO's spell at the plan; log pay uses reported years only. "+BENCH+"The standard errors are double clustered by plan and year. Coefficients marked with ***, **, and * are significant at the 1%, 5%, and 10% level, respectively.",11,[46,12,12,12,9,9,9,3,12,12,9],120)
+r=4
+ws.cell(row=r,column=1,value='Panel A. Conflicted CIO by period').font=FB; r+=1
+hd=['Specification','2001-2008','2009-2014','2015-2020','p: 09-14 = 01-08','p: 09-14 = 15-20','p: 01-08 = 15-20','','Other years (01-08, 15-20)','2009-2014','p: 09-14 = other']
+for y,_ in YS:
+    ws.cell(row=r,column=1,value=YL[y].replace(' (t)','')).font=FB; r+=1
+    for j,h in enumerate(hd):
+        if h: c=ws.cell(row=r,column=1+j,value=h); c.font=F; c.alignment=CENTER
+        ws.cell(row=r,column=1+j).border=Border(top=thin,bottom=thin)
+    ws.row_dimensions[r].height=30; r+=1
+    for sp,sl,_ in PSPECS:
+        a=P3[(sp,y)]['three']; bb=P3[(sp,y)]['two']
+        ws.cell(row=r,column=1,value=sl).font=F; ws.cell(row=r,column=1).alignment=LEFT
+        for j,kk in enumerate(['b1','b2','b3']): put(ws,r,2+j,reg('Three periods',sl,y,kk,a[kk],a['G']))
+        for j,kk in enumerate(['d21','d23','d13']):
+            c=ws.cell(row=r,column=5+j,value=pf_(reg('Three periods',sl,y,kk,a[kk],a['G']))); c.font=F; c.alignment=RIGHT; c.number_format='0.000'
+        put(ws,r,9,reg('Two periods',sl,y,'other years',bb['rest'],bb['G'])); put(ws,r,10,reg('Two periods',sl,y,'2009-2014',bb['mid'],bb['G']))
+        c=ws.cell(row=r,column=11,value=pf_(reg('Two periods',sl,y,'difference',bb['d'],bb['G']))); c.font=F; c.alignment=RIGHT; c.number_format='0.000'
+        r+=2
+    for c in range(1,12): ws.cell(row=r-1,column=c).border=Border(bottom=thin)
+    r+=1
+r+=1
+ws.cell(row=r,column=1,value='Panel B. Conflicted CIO x pay, without and with Conflicted CIO x period').font=FB; r+=1
+for j,(y,_) in enumerate(YS):
+    c0=2+3*j; ws.merge_cells(start_row=r,start_column=c0,end_row=r,end_column=c0+1); c=ws.cell(row=r,column=c0,value=YL[y]); c.font=F; c.alignment=CENTER
+r+=1
+for j,h in enumerate(['Pay measure (X)','Without period controls','With period controls','','Without period controls','With period controls','Obs.']):
+    if h: c=ws.cell(row=r,column=1+j,value=h); c.font=F; c.alignment=CENTER
+    ws.cell(row=r,column=1+j).border=Border(top=thin,bottom=thin)
+ws.row_dimensions[r].height=30; r+=1
+for xv,xl in PXS:
+    ws.cell(row=r,column=1,value=xl).font=F; ws.cell(row=r,column=1).alignment=LEFT
+    for j,(y,_) in enumerate(YS):
+        x=PM[(xv,y)]; c0=2+3*j
+        put(ws,r,c0,reg('Pay x period',xl,y,'confX without period',x['base']['confX'],x['base']['G'])); put(ws,r,c0+1,reg('Pay x period',xl,y,'confX with period',x['per']['confX'],x['per']['G']))
+    c=ws.cell(row=r,column=7,value=f"{PM[(xv,'peer_adj_ret100')]['per']['N']:,} / {PM[(xv,'b_AB')]['per']['N']:,}"); c.font=F; c.alignment=RIGHT
+    r+=2
+for c in range(1,8): ws.cell(row=r-1,column=c).border=Border(bottom=thin)
 wb.move_sheet('Estimates', offset=len(wb.sheetnames)-1)
 out='/home/user/PensionData/referee_response/time_to_departure/xsec_narrow_controls.xlsx'; wb.save(out); print('saved',out)
