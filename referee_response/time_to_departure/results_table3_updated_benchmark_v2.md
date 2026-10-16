@@ -1,0 +1,17 @@
+# Table III rerun with the updated benchmark (benchmarks_with_inferred.csv); Conflicted CIO coefficient (t), SE double clustered by plan and year
+dependent variable                                                                                                  (1)                (2)                (3)                (4)                (5)                (6)
+Peer-adjusted return (Panel A, unchanged)                                                              -0.557***(-3.68)   -0.582***(-3.13)   -0.641** (-2.21)   -0.698** (-2.38)   -0.475*  (-2.10)   -0.508** (-2.78)
+   N                                                                                                               1727               1483               1482               1482               1483               1483
+Original benchmark-adjusted return (paper Panel B)                                                     -0.518** (-2.65)   -0.598***(-3.19)   -0.959** (-2.23)   -0.889*  (-2.09)   -0.596*  (-1.87)   -0.611** (-2.24)
+   N                                                                                                               1240               1072               1069               1069               1072               1072
+PPD return minus updated reported benchmark                                                            -0.393** (-2.49)   -0.434***(-4.12)   -0.319*  (-1.92)   -0.333** (-2.12)   -0.380*  (-1.92)   -0.424** (-2.42)
+   N                                                                                                               1453               1249               1248               1248               1249               1249
+PPD return minus updated benchmark (reported + inferred grade A/B)                                     -0.385** (-2.46)   -0.491***(-4.15)   -0.373** (-2.23)   -0.411** (-2.15)   -0.384*  (-1.84)   -0.441** (-2.36)
+   N                                                                                                               1538               1320               1319               1319               1320               1320
+PPD return minus updated benchmark (A/B), rows where PPD and document returns agree within 0.5 pp      -0.411** (-2.70)   -0.535***(-4.41)   -0.457***(-3.11)   -0.409** (-2.36)   -0.403*  (-1.94)   -0.462** (-2.51)
+   N                                                                                                               1502               1286               1284               1284               1286               1286
+Document return minus updated benchmark (reported + inferred grade A/B)                                -0.404** (-2.63)   -0.503***(-4.21)   -0.320** (-2.11)   -0.357*  (-2.06)   -0.390*  (-1.90)   -0.445** (-2.47)
+   N                                                                                                               1538               1320               1319               1319               1320               1320
+
+Coverage in Table III sample: original benchmark 1329 | updated reported 1543 | updated reported+A/B 1649 | A/B with PPD-document return agreement 1604
+Rows where PPD and document returns differ by more than 0.5 pp among rows with the updated benchmark: 45 (conflicted 4)
