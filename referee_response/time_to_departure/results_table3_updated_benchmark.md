@@ -1,0 +1,21 @@
+# Table III rerun with the updated benchmark (benchmarks_with_inferred.csv); Conflicted CIO coefficient (t), SE double clustered by plan and year
+dependent variable                                                                                                  (1)                (2)                (3)                (4)                (5)                (6)
+Peer-adjusted return (Panel A, unchanged)                                                              -0.557***(-3.68)   -0.582***(-3.13)   -0.641** (-2.21)   -0.698** (-2.38)   -0.475*  (-2.10)   -0.508** (-2.78)
+   N                                                                                                               1727               1483               1482               1482               1483               1483
+Original benchmark-adjusted return (paper Panel B)                                                     -0.518** (-2.65)   -0.598***(-3.19)   -0.959** (-2.23)   -0.889*  (-2.09)   -0.596*  (-1.87)   -0.611** (-2.24)
+   N                                                                                                               1240               1072               1069               1069               1072               1072
+PPD return minus updated reported benchmark                                                            -0.395** (-2.50)   -0.436***(-4.12)   -0.318*  (-1.89)   -0.330*  (-2.07)   -0.381*  (-1.93)   -0.425** (-2.43)
+   N                                                                                                               1450               1246               1245               1245               1246               1246
+PPD return minus updated benchmark (reported + inferred A/B)                                           -0.391** (-2.49)   -0.490***(-4.24)   -0.375** (-2.20)   -0.406** (-2.12)   -0.385*  (-1.86)   -0.439** (-2.39)
+   N                                                                                                               1518               1303               1302               1302               1303               1303
+PPD return minus updated benchmark (reported + all inferred)                                           -0.353** (-2.16)   -0.477***(-4.56)   -0.408** (-2.43)   -0.418** (-2.39)   -0.384*  (-1.96)   -0.434** (-2.60)
+   N                                                                                                               1658               1428               1427               1427               1428               1428
+PPD return minus updated benchmark (A/B), rows where PPD and document returns agree within 0.5 pp      -0.417** (-2.73)   -0.535***(-4.50)   -0.458***(-3.04)   -0.405** (-2.32)   -0.405*  (-1.97)   -0.462** (-2.55)
+   N                                                                                                               1483               1270               1268               1268               1270               1270
+Document return minus updated benchmark (reported + inferred A/B)                                      -0.411** (-2.66)   -0.503***(-4.29)   -0.320*  (-2.07)   -0.351*  (-2.02)   -0.392*  (-1.93)   -0.444** (-2.51)
+   N                                                                                                               1518               1303               1302               1302               1303               1303
+Document return minus updated benchmark (reported + all inferred)                                      -0.365** (-2.33)   -0.489***(-5.08)   -0.354** (-2.34)   -0.363** (-2.34)   -0.390*  (-2.01)   -0.438** (-2.69)
+   N                                                                                                               1658               1428               1427               1427               1428               1428
+
+Coverage in Table III sample: original benchmark 1329 | updated reported 1538 | updated reported+A/B 1611 | updated all 1775 | A/B with PPD-document return agreement 1568
+Rows where PPD and document returns differ by more than 0.5 pp among rows with the updated benchmark: 43 (conflicted 4)
