@@ -8,12 +8,18 @@ FP = pd.read_pickle('df_newbench_v2.pkl')[['ppd_id','fy','CIO_TotalComp']].sort_
 FP['l_log_comp'] = np.where(FP.groupby('ppd_id').fy.diff()==1, np.log(FP.groupby('ppd_id').CIO_TotalComp.shift(1)), np.nan)
 S = S.merge(FP[['ppd_id','fy','l_log_comp']], on=['ppd_id','fy'], how='left', validate='1:1')
 S['log_comp_rel'] = S.log_comp - S.groupby('fy').log_comp.transform('mean')     # pay relative to the same fiscal year
+# relative pay filled within the CIO's spell at the plan: carry the nearest earlier reported year forward,
+# and the first reported year back (mirrors the backfilled underpaid measure)
+S['pay_spell'] = S.cio.astype(str)+'|'+S.ppd_id.astype(str)
+S = S.sort_values(['pay_spell','fy'])
+S['rel_pay_f'] = S.groupby('pay_spell').log_comp_rel.transform(lambda v: v.ffill().bfill())
+S = S.sort_values(['ppd_id','fy'])
 def spct(x, p):   # Stata summarize, detail percentile definition
     x=np.sort(np.asarray(x)); n=len(x); P=n*p/100
     return (x[int(P)-1]+x[int(P)])/2 if float(P).is_integer() else x[int(np.floor(P))]
-def run(y, xv, extra=(), drop=()):
+def run(y, xv, extra=(), drop=(), need=()):
     ctl = [c for c in FULL if c not in drop]
-    rhs0 = ['conf_pen_vendor', xv] + ctl + [e for e in extra]
+    rhs0 = ['conf_pen_vendor', xv] + ctl + [e for e in extra] + list(need)
     d = S.dropna(subset=[y]+rhs0+['fye_id']).copy()
     d = d[d.fye_id.map(d.fye_id.value_counts())>1].copy()     # reghdfe drops singleton FE groups; so does pyfixest
     m_, p25, p75 = d[xv].mean(), spct(d[xv],25), spct(d[xv],75)
@@ -44,10 +50,14 @@ VAR=[('main','log_comp',(),'Log CIO total comp (same year), centered'),
      ('lag','l_log_comp',(),'Lagged log CIO total comp'),
      ('rel','log_comp_rel',(),'Log comp minus fiscal-year mean (relative pay)'),
      ('size','log_comp',('size',),'Log comp, also Conflicted x Size'),
+     ('relf','rel_pay_f',(),'Relative pay, filled within CIO spell'),
+     ('relf_size','rel_pay_f',('size',),'Relative pay filled, plus Conflicted x Size'),
+     ('up_on_relf','underpaid',(),'CHECK: underpaid (binary) on the filled-pay sample'),
      ('age','cio_age',(),'CIO age in years (same year), centered; lagged log age control dropped'),
      ('age_keep','cio_age',(),'CIO age, lagged log age control kept')]
 DROP={'age':('l_log_cio_age',)}
-COMP={v:{y:run(y,xv,ex,DROP.get(v,())) for y,_ in YS} for v,xv,ex,_ in VAR}
+NEED={'up_on_relf':('rel_pay_f',)}
+COMP={v:{y:run(y,xv,ex,DROP.get(v,()),NEED.get(v,())) for y,_ in YS} for v,xv,ex,_ in VAR}
 def st(p): return '***' if p<0.01 else '**' if p<0.05 else '*' if p<0.1 else ''
 def fm(r): return f"{r['est']:7.3f}{st(r['p']):3s}({r['t']:5.2f})"
 print('cio_age in sample:', int(S.cio_age.notna().sum()), 'of', len(S), '| corr(cio_age, exp(l_log_cio_age))', round(S.cio_age.corr(np.exp(S.l_log_cio_age)),3))
