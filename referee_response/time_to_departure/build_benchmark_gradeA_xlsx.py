@@ -2,7 +2,9 @@ import pandas as pd, numpy as np
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment, Border, Side
 from openpyxl.utils import get_column_letter as L
-R=pd.read_pickle('gradeA_res.pkl'); T3=R['T3']; INT=R['INT']; COR=R['COR']; YS=R['YS']; XB=R['XB']; XC=R['XC']; BY=R['BY']
+import os
+FE=os.environ.get('GRADEA_FE','fye1')       # 'fye1' (fiscal-year-end date FE) or 'fy' (fiscal-year FE) for the interaction sheet
+R=pd.read_pickle('gradeA_res.pkl' if FE=='fye1' else 'gradeA_res_fy.pkl'); T3=R['T3']; INT=R['INT']; COR=R['COR']; YS=R['YS']; XB=R['XB']; XC=R['XC']; BY=R['BY']
 PANELS=[('Panel A. Peer-Adjusted Returns',[y for y,_ in YS if not y.startswith('b_')]),('Panel B. Benchmark-Adjusted Returns',BY)]
 TNR='Times New Roman'; SZ=10.5
 F=Font(name=TNR,size=SZ); FB=Font(name=TNR,size=SZ,bold=True); FI=Font(name=TNR,size=SZ,italic=True); BLUE=Font(name=TNR,size=SZ,color='0000FF')
@@ -59,7 +61,7 @@ wi=wb.create_sheet('Interactions Panel B',1); wi.sheet_view.showGridLines=False;
 XS=XB+XC; NC=len(XS)
 for c in range(2,2+NC): wi.column_dimensions[L(c)].width=13
 wi['A1']='Interaction Specification: Peer- and Benchmark-Adjusted Returns by Benchmark Confidence'; wi['A1'].font=FB
-note(wi,"This table repeats the interaction specification of xsec_interactions_fye1.xlsx (all Table III controls, fiscal-year-end date fixed effects, Conflicted CIO interacted with X). Panel A uses Peer-Adjusted Return, for all plan-years and for the plan-years that also have the grade-A benchmark-adjusted return; Panel B uses Benchmark-Adjusted Return for three versions of the policy benchmark. "+BMNOTE+"For binary X, Conflicted CIO is the effect when X = 0 and the italic row gives the effect when X = 1. Continuous X (log pay, relative pay filled within spell, log CIO age) is centered at its regression-sample mean, so Conflicted CIO is the effect at average X, and the italic rows give the effect at the 25th and 75th percentiles. Log CIO Age is the paper's log_cio_age, ln(1 + age); that column drops the lagged log CIO age control. The standard errors are double clustered by plan and year. Coefficients marked with ***, **, and * are significant at the 1%, 5%, and 10% level, respectively.",NC,140)
+note(wi,"This table repeats the interaction specification of xsec_interactions_fye1.xlsx (all Table III controls, "+('fiscal-year-end date fixed effects' if FE=='fye1' else 'fiscal-year fixed effects instead of fiscal-year-end date fixed effects')+", Conflicted CIO interacted with X). Panel A uses Peer-Adjusted Return, for all plan-years and for the plan-years that also have the grade-A benchmark-adjusted return; Panel B uses Benchmark-Adjusted Return for three versions of the policy benchmark. "+BMNOTE+"For binary X, Conflicted CIO is the effect when X = 0 and the italic row gives the effect when X = 1. Continuous X (log pay, relative pay filled within spell, log CIO age) is centered at its regression-sample mean, so Conflicted CIO is the effect at average X, and the italic rows give the effect at the 25th and 75th percentiles. Log CIO Age is the paper's log_cio_age, ln(1 + age); that column drops the lagged log CIO age control. The standard errors are double clustered by plan and year. Coefficients marked with ***, **, and * are significant at the 1%, 5%, and 10% level, respectively.",NC,140)
 r=4
 for pt,y in T3ORDER:
     if y==PANELS[0][1][0] or y==PANELS[1][1][0]: wi.cell(row=r,column=1,value=pt).font=FB; r+=1
@@ -84,9 +86,9 @@ for pt,y in T3ORDER:
 wc=wb.create_sheet('Correlations',2); wc.sheet_view.showGridLines=False; wc.column_dimensions['A'].width=44
 for c in range(2,9): wc.column_dimensions[L(c)].width=14
 wc['A1']='Correlation of Benchmark-Adjusted and Peer-Adjusted Returns'; wc['A1'].font=FB
-note(wc,"Correlations are computed over Table III sample plan-years (cio_dum = 1, fy <= 2020, curr1 = 0) where both returns are available. 'Within fiscal-year-end' demeans both returns by fiscal-year-end date (fye1) before correlating. "+BMNOTE,6,95)
+note(wc,"Correlations are computed over Table III sample plan-years (cio_dum = 1, fy <= 2020, curr1 = 0) where both returns are available. "+("'Within fiscal-year-end' demeans both returns by fiscal-year-end date (fye1)" if FE=='fye1' else "'Within fiscal year' demeans both returns by fiscal year (fy)")+" before correlating. "+BMNOTE,6,95)
 r=4
-hd=['Benchmark version','Plan-years','Pearson','Spearman','Pearson, within fiscal-year-end','Pearson, conflicted plan-years','Pearson, other plan-years']
+hd=['Benchmark version','Plan-years','Pearson','Spearman',('Pearson, within fiscal-year-end' if FE=='fye1' else 'Pearson, within fiscal year'),'Pearson, conflicted plan-years','Pearson, other plan-years']
 for j,h in enumerate(hd): x=wc.cell(row=r,column=1+j,value=h); x.font=F; x.alignment=CENTER; x.border=Border(top=thin,bottom=thin)
 wc.row_dimensions[r].height=45; r+=1
 for y in BY:
@@ -97,4 +99,4 @@ for y in BY:
 for j in range(len(hd)): wc.cell(row=r-1,column=1+j).border=Border(bottom=thin)
 for sh in (ws,wi,wc):
     sh.page_setup.orientation='landscape'; sh.sheet_properties.pageSetUpPr.fitToPage=True; sh.page_setup.fitToWidth=1; sh.page_setup.fitToHeight=0
-out='/home/user/PensionData/referee_response/time_to_departure/benchmark_gradeA_tables.xlsx'; wb.save(out); print('saved',out)
+out='/home/user/PensionData/referee_response/time_to_departure/'+('benchmark_gradeA_tables.xlsx' if FE=='fye1' else 'benchmark_gradeA_tables_fy.xlsx'); wb.save(out); print('saved',out)

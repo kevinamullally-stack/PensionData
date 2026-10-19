@@ -47,11 +47,13 @@ local full l_investmentreturn_1yr size l_ActFundedRatio_GASB l_EQTotal_Actl l_FI
 local full_noage : list full - l_log_cio_age
 
 * --- helper for a continuous X ----------------------------------------------------------------
-* contint y x, controls(...) out(file) mode(replace|append) label(text) [extra(vars)]
+* contint y x, controls(...) out(file) mode(replace|append) label(text) [extra(vars) absorb(fe)]
+* absorb(): fixed effects, fye1 by default
 * extra(): further variables interacted with Conflicted CIO (centered), e.g. size
 capture program drop contint
 program define contint
-	syntax varlist(min=2 max=2), CONTROLS(varlist) OUT(string) MODE(string) LABEL(string) [EXTRA(varlist)]
+	syntax varlist(min=2 max=2), CONTROLS(varlist) OUT(string) MODE(string) LABEL(string) [EXTRA(varlist) ABSORB(varname)]
+	if "`absorb'"=="" local absorb fye1
 	tokenize `varlist'
 	local y `1'
 	local x `2'
@@ -67,7 +69,7 @@ program define contint
 			local cx `cx' cx_`e'
 		}
 		* pass 1 finds the estimation sample (reghdfe drops singletons); X is then centered on it
-		reghdfe `y' newjob newjob_x xvar `controls' `cx' if cio_dum==1 & fy<=2020 & curr1==0, absorb(fye1) vce(cluster ppd_id fy)
+		reghdfe `y' newjob newjob_x xvar `controls' `cx' if cio_dum==1 & fy<=2020 & curr1==0, absorb(`absorb') vce(cluster ppd_id fy)
 		gen byte esamp = e(sample)
 		summarize `x' if esamp, detail
 		local m   = r(mean)
@@ -83,14 +85,14 @@ program define contint
 	label variable newjob   "Conflicted CIO"
 	label variable newjob_x "Conflicted CIO x X"
 	label variable xvar     "X (centered)"
-	reghdfe `y' newjob newjob_x xvar `controls' `cx' if cio_dum==1 & fy<=2020 & curr1==0, absorb(fye1) vce(cluster ppd_id fy)
+	reghdfe `y' newjob newjob_x xvar `controls' `cx' if cio_dum==1 & fy<=2020 & curr1==0, absorb(`absorb') vce(cluster ppd_id fy)
 	foreach q in 25 75 {
 		if `d`q''<0 lincom newjob - `=abs(`d`q'')'*newjob_x
 		else        lincom newjob + `d`q''*newjob_x
 		local e`q' = r(estimate)
 		local t`q' = r(estimate)/r(se)
 	}
-	outreg2 using `out', excel label `mode' $cosmetics keep(newjob newjob_x xvar `cx') addstat(Conflict effect at p25 of X, `e25', t-stat p25, `t25', Conflict effect at p75 of X, `e75', t-stat p75, `t75', Mean of X, `m') addtext(X, `label', Controls, All, FYE FE, Yes) stats(coef tstat)
+	outreg2 using `out', excel label `mode' $cosmetics keep(newjob newjob_x xvar `cx') addstat(Conflict effect at p25 of X, `e25', t-stat p25, `t25', Conflict effect at p75 of X, `e75', t-stat p75, `t75', Mean of X, `m') addtext(X, `label', Controls, All, FE, `absorb') stats(coef tstat)
 	drop newjob newjob_x xvar esamp `cx'
 end
 

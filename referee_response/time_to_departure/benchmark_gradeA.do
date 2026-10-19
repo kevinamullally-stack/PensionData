@@ -44,15 +44,18 @@ foreach v in bench_adj_upd bench_adj_updA bench_adj_rep {
 	spearman peer_adj_ret `v' if cio_dum==1 & fy<=2020 & curr1==0
 	pwcorr peer_adj_ret `v' if cio_dum==1 & fy<=2020 & curr1==0 & conf_pen_vendor==1
 	pwcorr peer_adj_ret `v' if cio_dum==1 & fy<=2020 & curr1==0 & conf_pen_vendor==0
-	* within fiscal-year-end date: demean both returns by fye1 on the pairwise sample
-	preserve
-	keep if cio_dum==1 & fy<=2020 & curr1==0 & !missing(peer_adj_ret, `v')
-	bysort fye1: egen m_p = mean(peer_adj_ret)
-	bysort fye1: egen m_b = mean(`v')
-	generate dm_p = peer_adj_ret - m_p
-	generate dm_b = `v' - m_b
-	correlate dm_p dm_b
-	restore
+	* within fiscal-year-end date (fye1) and within fiscal year (fy): demean both returns on the pairwise sample
+	foreach g in fye1 fy {
+		preserve
+		keep if cio_dum==1 & fy<=2020 & curr1==0 & !missing(peer_adj_ret, `v')
+		bysort `g': egen m_p = mean(peer_adj_ret)
+		bysort `g': egen m_b = mean(`v')
+		generate dm_p = peer_adj_ret - m_p
+		generate dm_b = `v' - m_b
+		display "within `g':"
+		correlate dm_p dm_b
+		restore
+	}
 }
 
 * =====================================================================================
@@ -86,12 +89,14 @@ foreach y in peer_adj_ret peer_cs bench_adj_upd bench_adj_updA bench_adj_rep {
 }
 
 * =====================================================================================
-* 3. Interaction specification (all Table III controls + fye1 FE)
+* 3. Interaction specification (all Table III controls), run with fiscal-year-end date FE
+*    (benchmark_gradeA_tables.xlsx) and with fiscal-year FE (benchmark_gradeA_tables_fy.xlsx)
 * =====================================================================================
 local full l_investmentreturn_1yr size l_ActFundedRatio_GASB l_EQTotal_Actl l_FITotal_Actl l_RETotal_Actl l_PETotal_Actl l_HFTotal_Actl l_AltMiscTotal_Actl l_COMDTotal_Actl l_CashTotal_Actl fincenter1 l_log_cio_age l_log_cio_tenure prior_private_exp Elite_inst l_sib1 wstate_political
 local full_noage : list full - l_log_cio_age
+foreach fe in fye1 fy {
 foreach y in peer_adj_ret peer_cs bench_adj_upd bench_adj_updA bench_adj_rep {
-	global name1 xsecint_gradeA_`y'
+	global name1 xsecint_gradeA_`fe'_`y'
 	local first 1
 	foreach s in underpaid young prior_private_exp fincenter1 highrate highfund {
 		local fullS : list full - s
@@ -102,18 +107,19 @@ foreach y in peer_adj_ret peer_cs bench_adj_upd bench_adj_updA bench_adj_rep {
 		label variable newjob   "Conflicted CIO"
 		label variable newjob_x "Conflicted CIO x X"
 		label variable xvar     "X"
-		reghdfe `y' newjob newjob_x xvar `fullS' if cio_dum==1 & fy<=2020 & curr1==0, absorb(fye1) vce(cluster ppd_id fy)
+		reghdfe `y' newjob newjob_x xvar `fullS' if cio_dum==1 & fy<=2020 & curr1==0, absorb(`fe') vce(cluster ppd_id fy)
 		lincom newjob + newjob_x
 		local e1 = r(estimate)
 		local t1 = r(estimate)/r(se)
-		if `first' outreg2 using $name1, excel label replace $cosmetics keep(newjob newjob_x xvar) addstat(Conflict effect when X=1, `e1', t-stat, `t1') addtext(X, `s', Controls, All, FYE FE, Yes) stats(coef tstat)
-		else      outreg2 using $name1, excel label append  $cosmetics keep(newjob newjob_x xvar) addstat(Conflict effect when X=1, `e1', t-stat, `t1') addtext(X, `s', Controls, All, FYE FE, Yes) stats(coef tstat)
+		if `first' outreg2 using $name1, excel label replace $cosmetics keep(newjob newjob_x xvar) addstat(Conflict effect when X=1, `e1', t-stat, `t1') addtext(X, `s', Controls, All, FE, `fe') stats(coef tstat)
+		else      outreg2 using $name1, excel label append  $cosmetics keep(newjob newjob_x xvar) addstat(Conflict effect when X=1, `e1', t-stat, `t1') addtext(X, `s', Controls, All, FE, `fe') stats(coef tstat)
 		local first 0
 		drop newjob newjob_x xvar
 	}
-	contint `y' log_comp,  controls(`full')       out($name1) mode(append) label(log_comp centered)
-	contint `y' rel_pay_f, controls(`full')       out($name1) mode(append) label(rel_pay_f centered)
+	contint `y' log_comp,  controls(`full')       out($name1) mode(append) label(log_comp centered) absorb(`fe')
+	contint `y' rel_pay_f, controls(`full')       out($name1) mode(append) label(rel_pay_f centered) absorb(`fe')
 	* log CIO age: the paper's log_cio_age, ln(1 + age); the lagged log age control is dropped
-	contint `y' log_cio_age, controls(`full_noage') out($name1) mode(append) label(log_cio_age centered)
+	contint `y' log_cio_age, controls(`full_noage') out($name1) mode(append) label(log_cio_age centered) absorb(`fe')
+}
 }
 **** End benchmark confidence ****
