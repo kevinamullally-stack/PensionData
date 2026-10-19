@@ -79,4 +79,69 @@ foreach y in peer_adj_ret bench_adj_upd {
 }
 graph combine `glist', ycommon rows(1) title("Event Study: Conflicted CIO Performance Around the Loglisci Shock", size(medium)) xsize(10) ysize(4.2)
 graph export "eventstudy_shock_peer_bench_stata.png", replace width(2400)
+
+* =====================================================================================
+* FY2017 as the base year (eventstudy_shock_tables_base2017.xlsx)
+* Tests grouped by shock timing: pre-shock (bin <2005, FY2005-2008), shock period (FY2009-2013,
+* shock2 = 1), late period (FY2014-2016, bin >2017); plus the mean FY2005-2008 coefficient minus
+* the mean FY2009-2013 coefficient.
+* =====================================================================================
+local baseyr 2017
+local eventvars "pre_bin"
+local prevars   "pre_bin"
+local shockvars ""
+local latevars  ""
+local clab ""
+forvalues yr = `prestart'/`postend' {
+	if `yr' != `baseyr' {
+		cap drop conf_yr_`yr'
+		gen conf_yr_`yr' = conf_pen_vendor * (fy == `yr')
+		label var conf_yr_`yr' "Conflicted CIO x FY`yr'"
+		local eventvars "`eventvars' conf_yr_`yr'"
+		local clab `"`clab' conf_yr_`yr' = "`yr'""'
+		if `yr' < 2009                 local prevars   "`prevars' conf_yr_`yr'"
+		if `yr' >= 2009 & `yr' <= 2013 local shockvars "`shockvars' conf_yr_`yr'"
+		if `yr' > 2013                 local latevars  "`latevars' conf_yr_`yr'"
+	}
+}
+local eventvars "`eventvars' post_bin"
+local latevars  "`latevars' post_bin"
+local flat ""
+foreach v of local prevars {
+	if "`v'"!="conf_yr_2008" local flat "`flat' (`v' = conf_yr_2008)"
+}
+local glist ""
+foreach y in peer_adj_ret bench_adj_upd {
+	global name3 eventstudy_shock_b2017_`y'
+	local mode replace
+	foreach fe in "fy" "ppd_id" "ppd_id fy" {
+		reghdfe `y' `eventvars' $controls1 $controls2 $controls3 $controls4 $controls5 ///
+			if cio_dum==1 & curr1==0 & fy<=2020, absorb(`fe') vce(cluster ppd_id fy)
+		test `prevars'
+		local p_pre = r(p)
+		test `flat'
+		local p_flat = r(p)
+		test `shockvars'
+		local p_shock = r(p)
+		test `latevars'
+		local p_late = r(p)
+		lincom (conf_yr_2005 + conf_yr_2006 + conf_yr_2007 + conf_yr_2008)/4 - (conf_yr_2009 + conf_yr_2010 + conf_yr_2011 + conf_yr_2012 + conf_yr_2013)/5
+		local d  = r(estimate)
+		local td = r(estimate)/r(se)
+		outreg2 using $name3, excel stats(coef tstat) alpha(0.01, 0.05, 0.1) symbol(***, **, *) nonotes tdec(2) rdec(3) bdec(3) ///
+			keep(`eventvars') addstat(Adj. R-squared, e(r2_a), Pre-shock jointly zero p, `p_pre', Pre-shock equal p, `p_flat', Shock period jointly zero p, `p_shock', Late period jointly zero p, `p_late', Pre-shock minus shock period, `d', t-stat, `td') ///
+			addtext(FE, `fe', Base year, 2017) `mode'
+		local mode append
+	}
+	local ttl = cond("`y'"=="peer_adj_ret", "A. Peer-adjusted return", "B. Benchmark-adjusted return (updated benchmark)")
+	* FY2009-2013 are coefficients 5-9 in the plot; dashed lines bracket the shock period
+	coefplot, keep(conf_yr_*) vertical yline(0) xline(4.5 9.5, lpattern(dash)) ///
+		xtitle("Fiscal year (FY`baseyr' = 0)") ytitle("Conflicted CIO x Year coefficient") ///
+		title("`ttl'", size(medium)) xlabel(, angle(45)) ///
+		coeflabels(`clab') name(es17_`y', replace)
+	graph export "eventstudy_shock_base2017_`y'.png", replace width(2400)
+	local glist "`glist' es17_`y'"
+}
+graph combine `glist', ycommon rows(1) title("Event Study: Conflicted CIO Performance Around the Loglisci Shock (FY2017 base)", size(medium)) xsize(10) ysize(4.2)
+graph export "eventstudy_shock_peer_bench_base2017_stata.png", replace width(2400)
 **** End event study ****
