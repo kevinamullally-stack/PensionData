@@ -1,13 +1,15 @@
 **** Benchmark confidence: grade A only and reported only ****
 * Regenerates benchmark_gradeA_tables.xlsx: correlations with the peer-adjusted return, Table III
-* Panel B, and the interaction specification for three versions of the updated benchmark:
+* (Panel A peer-adjusted, Panel B benchmark-adjusted), and the interaction specification, for the
+* peer-adjusted return (all plan-years; plan-years with bench_adj_updA) and three versions of the
+* updated benchmark:
 *   bench_adj_upd   reported benchmark, else inferred value graded A or B (earlier tables)
 *   bench_adj_updA  reported benchmark, else inferred value graded A
 *   bench_adj_rep   reported benchmark only
 *
 * Run AFTER updated_benchmark_tables.do (merges the benchmark file, creates bench_adj_upd) and
 * xsec_interactions.do (defines the contint program and creates young, highrate, highfund,
-* log_comp and rel_pay_f).
+* log_comp and rel_pay_f). log_cio_age is in the main dataset.
 
 capture confirm variable bench_adj_upd rel_pay_f inferred_estimate_grade
 if _rc {
@@ -28,6 +30,9 @@ generate bench_adj_updA = investmentreturn_1yr - bm_updA
 label variable bench_adj_updA "Benchmark-adjusted return, reported or grade A inferred benchmark (%)"
 generate bench_adj_rep = investmentreturn_1yr - total_fund_benchmark_return_pct
 label variable bench_adj_rep "Benchmark-adjusted return, reported benchmark only (%)"
+capture drop peer_cs
+generate peer_cs = peer_adj_ret if !missing(bench_adj_updA)
+label variable peer_cs "Peer-adjusted return, plan-years with the grade A benchmark-adjusted return"
 count if cio_dum==1 & fy<=2020 & curr1==0 & missing(total_fund_benchmark_return_pct) & inferred_estimate_grade=="B" & !missing(inferred_benchmark_return_pct)
 
 * =====================================================================================
@@ -51,14 +56,14 @@ foreach v in bench_adj_upd bench_adj_updA bench_adj_rep {
 }
 
 * =====================================================================================
-* 2. Table III, Panel B
+* 2. Table III: Panel A (peer_adj_ret, peer_cs) and Panel B (benchmark versions)
 * =====================================================================================
 global controls1 l_investmentreturn_1yr size l_ActFundedRatio_GASB
 global controls2 l_EQTotal_Actl l_FITotal_Actl l_RETotal_Actl l_PETotal_Actl l_HFTotal_Actl l_AltMiscTotal_Actl l_COMDTotal_Actl l_CashTotal_Actl
 global controls3 fincenter1
 global controls4 l_log_cio_age l_log_cio_tenure prior_private_exp Elite_inst
 global controls5 l_sib1 wstate_political
-foreach y in bench_adj_upd bench_adj_updA bench_adj_rep {
+foreach y in peer_adj_ret peer_cs bench_adj_upd bench_adj_updA bench_adj_rep {
 	global name1 table3_gradeA_`y'
 	capture drop newjob
 	gen newjob = conf_pen_vendor
@@ -85,7 +90,7 @@ foreach y in bench_adj_upd bench_adj_updA bench_adj_rep {
 * =====================================================================================
 local full l_investmentreturn_1yr size l_ActFundedRatio_GASB l_EQTotal_Actl l_FITotal_Actl l_RETotal_Actl l_PETotal_Actl l_HFTotal_Actl l_AltMiscTotal_Actl l_COMDTotal_Actl l_CashTotal_Actl fincenter1 l_log_cio_age l_log_cio_tenure prior_private_exp Elite_inst l_sib1 wstate_political
 local full_noage : list full - l_log_cio_age
-foreach y in bench_adj_upd bench_adj_updA bench_adj_rep {
+foreach y in peer_adj_ret peer_cs bench_adj_upd bench_adj_updA bench_adj_rep {
 	global name1 xsecint_gradeA_`y'
 	local first 1
 	foreach s in underpaid young prior_private_exp fincenter1 highrate highfund {
@@ -108,6 +113,7 @@ foreach y in bench_adj_upd bench_adj_updA bench_adj_rep {
 	}
 	contint `y' log_comp,  controls(`full')       out($name1) mode(append) label(log_comp centered)
 	contint `y' rel_pay_f, controls(`full')       out($name1) mode(append) label(rel_pay_f centered)
-	contint `y' cio_age,   controls(`full_noage') out($name1) mode(append) label(cio_age centered)
+	* log CIO age: the paper's log_cio_age, ln(1 + age); the lagged log age control is dropped
+	contint `y' log_cio_age, controls(`full_noage') out($name1) mode(append) label(log_cio_age centered)
 }
 **** End benchmark confidence ****

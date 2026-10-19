@@ -2,11 +2,13 @@ import pandas as pd, numpy as np
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment, Border, Side
 from openpyxl.utils import get_column_letter as L
-R=pd.read_pickle('gradeA_res.pkl'); T3=R['T3']; INT=R['INT']; COR=R['COR']; YS=R['YS']; XB=R['XB']; XC=R['XC']
+R=pd.read_pickle('gradeA_res.pkl'); T3=R['T3']; INT=R['INT']; COR=R['COR']; YS=R['YS']; XB=R['XB']; XC=R['XC']; BY=R['BY']
+PANELS=[('Panel A. Peer-Adjusted Returns',[y for y,_ in YS if not y.startswith('b_')]),('Panel B. Benchmark-Adjusted Returns',BY)]
 TNR='Times New Roman'; SZ=10.5
 F=Font(name=TNR,size=SZ); FB=Font(name=TNR,size=SZ,bold=True); FI=Font(name=TNR,size=SZ,italic=True); BLUE=Font(name=TNR,size=SZ,color='0000FF')
 thin=Side(style='thin'); CENTER=Alignment(horizontal='center',vertical='center',wrap_text=True); RIGHT=Alignment(horizontal='right'); JUST=Alignment(horizontal='justify',wrap_text=True,vertical='top')
-YL={'b_AB':'Reported + inferred grade A/B (as before)','b_A':'Reported + inferred grade A only','b_rep':'Reported benchmarks only'}
+YL={'peer_adj_ret100':'All plan-years','peer_cs':'Plan-years with the grade-A benchmark-adjusted return','b_AB':'Reported + inferred grade A/B (as before)','b_A':'Reported + inferred grade A only','b_rep':'Reported benchmarks only'}
+YD={'peer_adj_ret100':'Peer-adjusted','peer_cs':'Peer-adjusted','b_AB':'Benchmark-adjusted','b_A':'Benchmark-adjusted','b_rep':'Benchmark-adjusted'}
 wb=Workbook(); E=wb.active; E.title='Estimates'
 E['A1']='Estimates behind the tables. Blue = regression output (coefficient, SE, minimum cluster count). t and p are formulas; p uses the t distribution with (min clusters - 1) df. SE double clustered by plan and year, with the eigenvalue fix.'; E['A1'].font=FI
 for j,h in enumerate(['Table','Benchmark','Column / X','Term','Coefficient','SE','Clusters (min)','t','p'],1): E.cell(row=3,column=j,value=h).font=FB
@@ -14,7 +16,7 @@ for c,w in zip('ABCD',[18,42,28,40]): E.column_dimensions[c].width=w
 er=[4]
 def reg(tab,y,col,term,r,G):
     i=er[0]; er[0]+=1
-    for j,v in enumerate([tab,YL[y],col,term],1): E.cell(row=i,column=j,value=v).font=F
+    for j,v in enumerate([tab,YD[y]+': '+YL[y],col,term],1): E.cell(row=i,column=j,value=v).font=F
     E.cell(row=i,column=5,value=r['est']).font=BLUE; E.cell(row=i,column=6,value=r['se']).font=BLUE; E.cell(row=i,column=7,value=G).font=BLUE
     E.cell(row=i,column=8,value=f'=IF(F{i}>0,E{i}/F{i},"")').font=F; E.cell(row=i,column=9,value=f'=IF(H{i}="","",TDIST(ABS(H{i}),G{i}-1,2))').font=F
     for j in [5,6,8,9]: E.cell(row=i,column=j).number_format='0.0000'
@@ -30,13 +32,15 @@ BMNOTE=("Benchmark-Adjusted Return is the plan's return minus its policy benchma
 # ---------------- Table III Panel B ----------------
 ws=wb.create_sheet('Table III Panel B',0); ws.sheet_view.showGridLines=False; ws.column_dimensions['A'].width=34
 for c in range(2,8): ws.column_dimensions[L(c)].width=13
-ws['A1']='Table III, Panel B: Benchmark-Adjusted Returns by Benchmark Confidence'; ws['A1'].font=FB
-note(ws,"This table re-estimates Table III, Panel B for three versions of the policy benchmark. "+BMNOTE+"Columns follow Table III: (1) base controls with year fixed effects; (2) all controls with year fixed effects; (3) plan fixed effects; (4) plan and year fixed effects; (5) and (6) code Conflicted CIO as 1 only in the last 5 or 10 years before the CIO departs. The standard errors are double clustered by plan and year. Coefficients marked with ***, **, and * are significant at the 1%, 5%, and 10% level, respectively.",6,105)
+ws['A1']='Table III: Peer- and Benchmark-Adjusted Returns by Benchmark Confidence'; ws['A1'].font=FB
+note(ws,"This table re-estimates Table III. Panel A uses Peer-Adjusted Return, for all plan-years (as in the paper) and for the plan-years that also have the grade-A benchmark-adjusted return. Panel B uses Benchmark-Adjusted Return for three versions of the policy benchmark. "+BMNOTE+"Columns follow Table III: (1) base controls with year fixed effects; (2) all controls with year fixed effects; (3) plan fixed effects; (4) plan and year fixed effects; (5) and (6) code Conflicted CIO as 1 only in the last 5 or 10 years before the CIO departs. The standard errors are double clustered by plan and year. Coefficients marked with ***, **, and * are significant at the 1%, 5%, and 10% level, respectively.",6,105)
 r=4
 for c in range(6): x=ws.cell(row=r,column=2+c,value=f'({c+1})'); x.font=F; x.alignment=CENTER; x.border=Border(top=thin,bottom=thin)
 ws.cell(row=r,column=1).border=Border(top=thin,bottom=thin); r+=1
-for y,_ in YS:
-    ws.cell(row=r,column=1,value=YL[y]).font=FB; r+=1
+T3ORDER=[(pt,y) for pt,ys in PANELS for y in ys]
+for pt,y in T3ORDER:
+    if y==PANELS[0][1][0] or y==PANELS[1][1][0]: ws.cell(row=r,column=1,value=pt).font=FB; ws.cell(row=r,column=1).border=Border(bottom=thin); r+=1
+    ws.cell(row=r,column=1,value=YL[y]).font=FI; r+=1
     ws.cell(row=r,column=1,value='Conflicted CIO (0/1)').font=F
     for c,res in enumerate(T3[y]): put(ws,r,2+c,reg('Table III B',y,f'({c+1})','Conflicted CIO',res['conf'],res['G']))
     r+=2
@@ -54,11 +58,12 @@ for c in range(1,8): ws.cell(row=r-1,column=c).border=Border(bottom=thin)
 wi=wb.create_sheet('Interactions Panel B',1); wi.sheet_view.showGridLines=False; wi.column_dimensions['A'].width=40
 XS=XB+XC; NC=len(XS)
 for c in range(2,2+NC): wi.column_dimensions[L(c)].width=13
-wi['A1']='Interaction Specification, Benchmark-Adjusted Returns by Benchmark Confidence'; wi['A1'].font=FB
-note(wi,"This table repeats Panel B of the Interactions sheet in xsec_interactions_fye1.xlsx (all Table III controls, fiscal-year-end date fixed effects, Conflicted CIO interacted with X) for the three benchmark versions. "+BMNOTE+"For binary X, Conflicted CIO is the effect when X = 0 and the italic row gives the effect when X = 1. Continuous X (log pay, relative pay filled within spell, CIO age) is centered at its regression-sample mean, so Conflicted CIO is the effect at average X, and the italic rows give the effect at the 25th and 75th percentiles. The CIO Age column drops the lagged log CIO age control. The standard errors are double clustered by plan and year. Coefficients marked with ***, **, and * are significant at the 1%, 5%, and 10% level, respectively.",NC,140)
+wi['A1']='Interaction Specification: Peer- and Benchmark-Adjusted Returns by Benchmark Confidence'; wi['A1'].font=FB
+note(wi,"This table repeats the interaction specification of xsec_interactions_fye1.xlsx (all Table III controls, fiscal-year-end date fixed effects, Conflicted CIO interacted with X). Panel A uses Peer-Adjusted Return, for all plan-years and for the plan-years that also have the grade-A benchmark-adjusted return; Panel B uses Benchmark-Adjusted Return for three versions of the policy benchmark. "+BMNOTE+"For binary X, Conflicted CIO is the effect when X = 0 and the italic row gives the effect when X = 1. Continuous X (log pay, relative pay filled within spell, log CIO age) is centered at its regression-sample mean, so Conflicted CIO is the effect at average X, and the italic rows give the effect at the 25th and 75th percentiles. Log CIO Age is the paper's log_cio_age, ln(1 + age); that column drops the lagged log CIO age control. The standard errors are double clustered by plan and year. Coefficients marked with ***, **, and * are significant at the 1%, 5%, and 10% level, respectively.",NC,140)
 r=4
-for y,_ in YS:
-    wi.cell(row=r,column=1,value=YL[y]).font=FB; r+=1
+for pt,y in T3ORDER:
+    if y==PANELS[0][1][0] or y==PANELS[1][1][0]: wi.cell(row=r,column=1,value=pt).font=FB; r+=1
+    wi.cell(row=r,column=1,value=YL[y]).font=FI; r+=1
     for j,(xv,xl) in enumerate(XS): x=wi.cell(row=r,column=2+j,value=f'X = {xl}'); x.font=F; x.alignment=CENTER; x.border=Border(top=thin,bottom=thin)
     wi.cell(row=r,column=1).border=Border(top=thin,bottom=thin); wi.row_dimensions[r].height=30; r+=1
     for term,tl,fnt in [('conf','Conflicted CIO (0/1)',F),('confX','Conflicted CIO x X',F),('X','X',F),('sum','Conflicted CIO effect when X = 1',FI),('p25','Conflicted CIO effect, 25th pct. of X',FI),('p75','Conflicted CIO effect, 75th pct. of X',FI)]:
@@ -84,7 +89,7 @@ r=4
 hd=['Benchmark version','Plan-years','Pearson','Spearman','Pearson, within fiscal-year-end','Pearson, conflicted plan-years','Pearson, other plan-years']
 for j,h in enumerate(hd): x=wc.cell(row=r,column=1+j,value=h); x.font=F; x.alignment=CENTER; x.border=Border(top=thin,bottom=thin)
 wc.row_dimensions[r].height=45; r+=1
-for y,_ in YS:
+for y in BY:
     c=COR[y]; vals=[YL[y],c['N'],c['pearson'],c['spearman'],c['within'],c['conf'],c['nonconf']]
     for j,v in enumerate(vals):
         x=wc.cell(row=r,column=1+j,value=float(v) if j>=2 else v); x.font=F if j==0 else BLUE; x.alignment=RIGHT if j else Alignment(horizontal='left'); x.number_format='0.000' if j>=2 else '#,##0'
