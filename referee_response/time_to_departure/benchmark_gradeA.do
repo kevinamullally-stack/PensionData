@@ -9,7 +9,7 @@
 *
 * Run AFTER updated_benchmark_tables.do (merges the benchmark file, creates bench_adj_upd) and
 * xsec_interactions.do (defines the contint program and creates young, highrate, highfund,
-* log_comp and rel_pay_f). log_cio_age is in the main dataset.
+* log_comp and rel_pay_f). log_cio_age is in the main dataset; z_log_age standardizes it.
 
 capture confirm variable bench_adj_upd rel_pay_f inferred_estimate_grade
 if _rc {
@@ -94,6 +94,11 @@ foreach y in peer_adj_ret peer_cs bench_adj_upd bench_adj_updA bench_adj_rep {
 * =====================================================================================
 local full l_investmentreturn_1yr size l_ActFundedRatio_GASB l_EQTotal_Actl l_FITotal_Actl l_RETotal_Actl l_PETotal_Actl l_HFTotal_Actl l_AltMiscTotal_Actl l_COMDTotal_Actl l_CashTotal_Actl fincenter1 l_log_cio_age l_log_cio_tenure prior_private_exp Elite_inst l_sib1 wstate_political
 local full_noage : list full - l_log_cio_age
+* standardized log CIO age: log_cio_age = ln(1 + age), minus its mean, divided by its sd, over the Table III sample
+capture drop z_log_age
+quietly summarize log_cio_age if cio_dum==1 & fy<=2020 & curr1==0
+generate z_log_age = (log_cio_age - r(mean))/r(sd)
+label variable z_log_age "Log CIO age, standardized"
 foreach fe in fye1 fy {
 foreach y in peer_adj_ret peer_cs bench_adj_upd bench_adj_updA bench_adj_rep {
 	global name1 xsecint_gradeA_`fe'_`y'
@@ -118,8 +123,8 @@ foreach y in peer_adj_ret peer_cs bench_adj_upd bench_adj_updA bench_adj_rep {
 	}
 	contint `y' log_comp,  controls(`full')       out($name1) mode(append) label(log_comp centered) absorb(`fe')
 	contint `y' rel_pay_f, controls(`full')       out($name1) mode(append) label(rel_pay_f centered) absorb(`fe')
-	* log CIO age: the paper's log_cio_age, ln(1 + age); the lagged log age control is dropped
-	contint `y' log_cio_age, controls(`full_noage') out($name1) mode(append) label(log_cio_age centered) absorb(`fe')
+	* standardized log CIO age; the lagged log age control is dropped
+	contint `y' z_log_age, controls(`full_noage') out($name1) mode(append) label(z_log_age) absorb(`fe')
 }
 }
 **** End benchmark confidence ****

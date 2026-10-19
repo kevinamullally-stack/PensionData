@@ -5,6 +5,9 @@ S['b_A'] = S.invret100 - S.bm_A
 S['b_rep'] = S.invret100 - S.bm_rep
 S['peer_cs'] = S.peer_adj_ret100.where(S.b_A.notna())                        # peer-adjusted, plan-years with the grade-A benchmark-adjusted return
 assert 'log_cio_age' in S
+# standardized log CIO age: log_cio_age = ln(1+age), minus its mean, divided by its sd, over the Table III sample
+S['z_log_age'] = (S.log_cio_age - S.log_cio_age.mean())/S.log_cio_age.std()
+print('log_cio_age over the Table III sample: mean %.4f sd %.4f' % (S.log_cio_age.mean(), S.log_cio_age.std()))
 for q in [5,10]:
     S[f'last{q}'] = S.conf_cio.astype(float)
     S.loc[S.year_departs.notna() & (S.conf_cio==1) & (S.fy <= S.year_departs - q), f'last{q}'] = 0.0
@@ -55,7 +58,7 @@ T3COLS=[('conf_pen_vendor',C1+C2+C3,'fy'),('conf_pen_vendor',FULL,'fy'),('conf_p
 T3={y:[reg(y,x,c,fe) for x,c,fe in T3COLS] for y,_ in YS}
 # Interactions: all controls + fye1 FE
 XB=[('underpaid','Underpaid'),('young','Young CIO'),('prior_private_exp','Prior Private Exp.'),('fincenter1','Financial Center'),('highrate','High Discount Rate'),('highfund','High Funding')]
-XC=[('log_comp','Log CIO Total Comp.',FULL),('rel_pay_f','Relative CIO Pay (filled)',FULL),('log_cio_age','Log CIO Age',[c for c in FULL if c!='l_log_cio_age'])]
+XC=[('log_comp','Log CIO Total Comp.',FULL),('rel_pay_f','Relative CIO Pay (filled)',FULL),('z_log_age','Log CIO Age (std.)',[c for c in FULL if c!='l_log_cio_age'])]
 INT={y:{**{xv:reg(y,'conf_pen_vendor',[c for c in FULL if c!=xv],'fy',X=xv) for xv,_ in XB},
         **{xv:reg(y,'conf_pen_vendor',ctl,'fy',X=xv,center=True) for xv,_,ctl in XC}} for y,_ in YS}
 # correlations with the peer-adjusted return
