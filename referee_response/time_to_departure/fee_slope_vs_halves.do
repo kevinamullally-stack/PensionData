@@ -52,8 +52,8 @@ foreach var in fee fee_dm {
 			generate lenbin = cond(n==3,1,cond(n<=5,2,cond(n<=8,3,4)))
 			label define lenbin 1 "3" 2 "4-5" 3 "6-8" 4 "9+", replace
 			label values lenbin lenbin
-			tabstat slope_w, by(lenbin) stat(mean n), if conf_pen_vendor==1
-			tabstat slope_w, by(lenbin) stat(mean n), if conf_pen_vendor==0
+			tabstat slope_w if conf_pen_vendor==1, by(lenbin) stat(mean n)
+			tabstat slope_w if conf_pen_vendor==0, by(lenbin) stat(mean n)
 		}
 	}
 	restore
