@@ -1,12 +1,12 @@
 **** Table III (columns 2-4) with Conflicted CIO split into halves of tenure: FYE FE and CIO FE ****
 * Regenerates table3_conflicted_halves_fye1.xlsx: Panel A peer_adj_ret, Panel B bench_adj_upd.
 *   (1) fiscal-year-end date FE; (2) plan FE; (3) plan + fiscal-year-end date FE;
-*   (4) CIO (CIO-plan spell) + fiscal-year-end date FE.
+*   (4) conflicted CIOs' plan-years only, CIO (CIO-plan spell) + fiscal-year-end date FE.
 * Conflicted CIO is replaced by x First Half and x Second Half of the CIO's tenure at the plan
 * (second half = years in which tenure exceeds half of tenure at departure, as in halves_v3_fye1.do).
-* Conflicted CIO is constant within a CIO's tenure (0 only in the departure year), so column 4
-* identifies only Second minus First; Financial Center, Prior Private Experience and Elite College are
-* absorbed and dropped, and column 4 keeps the plan-years used in columns 1-3.
+* Columns 1-3: reference group = non-conflicted plan-years. Column 4: conflicted plan-years only, First
+* Half is the reference; Financial Center, Prior Private Experience and Elite College are absorbed by the
+* CIO FE and dropped (rows still require them non-missing, as in columns 1-3).
 * Versions: Table III controls; without log CIO tenure and age.
 *
 * Run AFTER updated_benchmark_tables.do (creates bench_adj_upd).
@@ -59,14 +59,14 @@ foreach ver in full noten {
 				addstat(Second minus first, `d', t, `td', p-value, `p', Adj. R-squared, e(r2_a)) addtext(Clustered, Plan & Year, FE, `fe') stats(coef tstat)
 			local mode append
 		}
-		* (4) CIO + fiscal-year-end date FE: only Second minus First is identified
-		reghdfe `y' conf_first conf_second conf_undef `ctlw' if $t3 & !missing(fincenter1, prior_private_exp, Elite_inst), absorb(spell_id fye1) vce(cluster ppd_id fy)
-		lincom conf_second - conf_first
-		local d = r(estimate)
-		local td = r(estimate)/r(se)
-		local p = r(p)
-		outreg2 using `nm', excel label append $cosmetics keep(`ctlw') ///
-			addstat(Second minus first, `d', t, `td', p-value, `p', Adj. R-squared, e(r2_a)) addtext(Clustered, Plan & Year, FE, CIO + fye1) stats(coef tstat)
+		* (4) conflicted CIOs only, CIO + fiscal-year-end date FE: First Half is the reference, so the
+		*     coefficient on conf_second (= second_half in this sample) is the within-CIO change
+		reghdfe `y' conf_second `ctlw' if $t3 & conf_pen_vendor==1 & !missing(second_half) & !missing(fincenter1, prior_private_exp, Elite_inst), absorb(spell_id fye1) vce(cluster ppd_id fy)
+		local d = _b[conf_second]
+		local td = _b[conf_second]/_se[conf_second]
+		local p = 2*ttail(e(df_r), abs(`td'))
+		outreg2 using `nm', excel label append $cosmetics keep(conf_second `ctlw') ///
+			addstat(Second minus first, `d', t, `td', p-value, `p', Adj. R-squared, e(r2_a)) addtext(Clustered, Plan & Year, FE, CIO + fye1, Sample, Conflicted CIOs) stats(coef tstat)
 	}
 }
 **** End ****
